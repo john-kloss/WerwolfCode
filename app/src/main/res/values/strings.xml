@@ -6,4 +6,5 @@
     <string name="start_game">Spiel starten</string>
     <string name="join_game">Spiel beitreten</string>
     <string name="settings">Einstellungen</string>
+    <string name="title_activity_game">GameActivity</string>
 </resources>
