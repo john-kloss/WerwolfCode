@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/SizeButtonText"
         android:text="@string/start_game"
-        android:onClick="startGame"
+        android:onClick="startGameSetup"
     />
 
     <Button
@@ -52,5 +52,6 @@
         android:layout_below="@id/joinGame"
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/SizeButtonText"
-        android:text="@string/settings"/>
+        android:text="@string/settings"
+        android:onClick="startSettings"/>
 </RelativeLayout>
