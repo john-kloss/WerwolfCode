@@ -1,5 +1,6 @@
 package sopro.werwolf;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -49,8 +50,7 @@ public class GameActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //next phase modulo the number of phases
-                phasecounter = phasecounter++ % phase.length;
+                nextPhase();
             }
         });
     }
@@ -93,24 +93,73 @@ public class GameActivity extends AppCompatActivity {
         boolean alreadyClicked = false;
         Button button = (Button) view;
 
-        //get all buttons and make them transparent
+        //make all buttons transparent
         ViewGroup gameView =(ViewGroup) findViewById(R.id.gameView);
         for (int i=0; i < gameView.getChildCount(); i++){
             LinearLayout row = (LinearLayout) gameView.getChildAt(i);
             for (int j=0; j < row.getChildCount(); j++){
-                Button currentButton = (Button) row.getChildAt(i);
+                Button currentButton = (Button) row.getChildAt(j);
                 currentButton.setBackgroundColor(0);
             }
-
         }
 
+        //if button was already selected, unselect it
         if(button.equals(currentlySelectedButton)) {
             currentlySelectedButton = null;
         }
+        //otherwise select it
         else{
             currentlySelectedButton = button;
             Snackbar.make(view, "Du hast "+ button.getText().toString() +" ausgewählt", Snackbar.LENGTH_LONG).show();
             button.setBackgroundColor(getResources().getColor(R.color.button_material_dark));
         }
+    }
+
+    private void nextPhase(){
+        //next phase modulo the number of phases
+        phasecounter = (phasecounter+1) % phase.length;
+
+        //action based on phase
+        switch (phase[phasecounter]){
+            case "tag":
+                findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.tag));
+                Snackbar.make(findViewById(R.id.gameView), "Es ist Tag - Wähle eine Person, die du hängen möchtest", Snackbar.LENGTH_LONG).show();
+                break;
+
+            case "dieb":
+                findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.dieb));
+                Snackbar.make(findViewById(R.id.gameView), "Dieb - wähle eine neue Identität", Snackbar.LENGTH_LONG).show();
+                break;
+
+            case "amor":
+                findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.amor));
+                Snackbar.make(findViewById(R.id.gameView), "Amor - wähle zwei Personen, die sich ineinander verlieben", Snackbar.LENGTH_LONG).show();
+                break;
+
+            case "werwoelfe":
+                findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.werwoelfe));
+                Snackbar.make(findViewById(R.id.gameView), "Werwolf - wähle eine Person, die du töten möchtest", Snackbar.LENGTH_LONG).show();
+                break;
+
+            case "seherin":
+                findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.seherin));
+                Snackbar.make(findViewById(R.id.gameView), "Seherin - wähle eine Person, deren Identität du erfahren möchtest", Snackbar.LENGTH_LONG).show();
+                // TODO:  show identity
+                break;
+
+            case "hexe":
+                findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.hexe));
+                Snackbar.make(findViewById(R.id.gameView), "Hexe - du siehst nun das Opfer der Nacht. Möchtest du deinen Heiltrank benutzen?", Snackbar.LENGTH_LONG).show();
+                // TODO: show victim 
+                // TODO: two selection buttons
+                // TODO: save choice
+                Snackbar.make(findViewById(R.id.gameView), "Hexe - möchtest du deinen Gifttrank verwenden?", Snackbar.LENGTH_LONG).show();
+                // TODO: two selection buttons
+                // TODO: save choice
+                break;
+
+        }
+
+
     }
 }
