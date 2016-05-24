@@ -10,33 +10,81 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.LinearLayout;
 
 public class GameActivity extends AppCompatActivity {
 
     Button currentlySelectedButton;
+
+    //string contains phases, counter keeps track of current phase
+    String[] phase = {"tag","dieb","amor","werwoelfe","seherin","hexe"};
+    int phasecounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        //get the number of Players
+        Intent intent = getIntent();
+        int players = intent.getIntExtra("players", 8);
+        String name = intent.getStringExtra("name");
+
         //View settings: Fullscreen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //creates rows (Linear Layouts) and playerbuttons
+        createObjects(players);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Hello", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //next phase modulo the number of phases
+                phasecounter = phasecounter++ % phase.length;
             }
         });
+    }
+
+
+    private void createObjects(int players){
+        //create Linear Layouts in gameView
+        LinearLayout row1 = (LinearLayout) findViewById(R.id.row1);
+        LinearLayout row2 = (LinearLayout) findViewById(R.id.row2);
+        LinearLayout row3 = (LinearLayout) findViewById(R.id.row3);
+        LinearLayout row4 = (LinearLayout) findViewById(R.id.row4);
+
+        //create playerbuttons
+        for (int i = 0; i < players; i++){
+            Button button = new Button(this);
+            button.setText("player"+i);
+            View.OnClickListener onClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    playerSelected(v);
+                }
+            };
+            button.setOnClickListener(onClickListener);
+            button.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.mipmap.ic_launcher, 0, 0);
+
+            //insert into rows (Linear Layouts)
+            if (i < 4)
+                row1.addView(button);
+            else if (i < 8)
+                row2.addView(button);
+            else if (i < 12)
+                row3.addView(button);
+            else
+                row4.addView(button);
+        }
     }
 
     public void playerSelected(View view){
@@ -44,10 +92,14 @@ public class GameActivity extends AppCompatActivity {
         Button button = (Button) view;
 
         //get all buttons and make them transparent
-        ViewGroup parentView =(ViewGroup) findViewById(R.id.gameView);
-        for (int i=0; i < parentView.getChildCount(); i++){
-            Button currentButton = (Button) (parentView.getChildAt(i));
-            currentButton.setBackgroundColor(Color.TRANSPARENT);
+        ViewGroup gameView =(ViewGroup) findViewById(R.id.gameView);
+        for (int i=0; i < gameView.getChildCount(); i++){
+            LinearLayout row = (LinearLayout) gameView.getChildAt(i);
+            for (int j=0; j < row.getChildCount(); j++){
+                Button currentButton = (Button) (row.getChildAt(i));
+                currentButton.setBackgroundColor(android.R.drawable.btn_default);
+            }
+
         }
 
         if(button.equals(currentlySelectedButton)) {
@@ -59,4 +111,6 @@ public class GameActivity extends AppCompatActivity {
             button.setBackgroundColor(getResources().getColor(R.color.button_material_dark));
         }
     }
+
+
 }

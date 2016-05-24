@@ -60,7 +60,14 @@ public class GameSetupActivity extends AppCompatActivity{
     }
 
     public void startGame(View view){
+
+        NumberPicker players = (NumberPicker) findViewById(R.id.numberPicker);
+        EditText name = (EditText) findViewById(R.id.editText);
+
+        players.getValue();
         Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra("players", players.getValue());
+        intent.putExtra("name", name.getText().toString());
         startActivity(intent);
     }
 
