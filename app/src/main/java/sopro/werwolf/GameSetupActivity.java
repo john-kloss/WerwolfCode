@@ -25,7 +25,7 @@ public class GameSetupActivity extends AppCompatActivity{
         setContentView(R.layout.activity_game_setup);
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setEnabled(false);
+        //fab.setEnabled(false);  -> enabled for debugging
         final EditText editText = (EditText) findViewById(R.id.editText);
 
 

@@ -43,6 +43,7 @@ public class GameActivity extends AppCompatActivity {
         //creates rows (Linear Layouts) and playerbuttons
         createObjects(players);
 
+        Snackbar.make(findViewById(R.id.gameView), "Willkommen im Spiel "+name, Snackbar.LENGTH_LONG).show();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +67,7 @@ public class GameActivity extends AppCompatActivity {
         for (int i = 0; i < players; i++){
             Button button = new Button(this);
             button.setText("player"+i);
+            button.setBackgroundColor(0);
             View.OnClickListener onClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -76,11 +78,11 @@ public class GameActivity extends AppCompatActivity {
             button.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.mipmap.ic_launcher, 0, 0);
 
             //insert into rows (Linear Layouts)
-            if (i < 4)
+            if (i < 5)
                 row1.addView(button);
-            else if (i < 8)
+            else if (i < 10)
                 row2.addView(button);
-            else if (i < 12)
+            else if (i < 15)
                 row3.addView(button);
             else
                 row4.addView(button);
@@ -96,8 +98,8 @@ public class GameActivity extends AppCompatActivity {
         for (int i=0; i < gameView.getChildCount(); i++){
             LinearLayout row = (LinearLayout) gameView.getChildAt(i);
             for (int j=0; j < row.getChildCount(); j++){
-                Button currentButton = (Button) (row.getChildAt(i));
-                currentButton.setBackgroundColor(android.R.drawable.btn_default);
+                Button currentButton = (Button) row.getChildAt(i);
+                currentButton.setBackgroundColor(0);
             }
 
         }
@@ -111,6 +113,4 @@ public class GameActivity extends AppCompatActivity {
             button.setBackgroundColor(getResources().getColor(R.color.button_material_dark));
         }
     }
-
-
 }
