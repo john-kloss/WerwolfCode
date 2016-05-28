@@ -11,9 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -26,48 +29,126 @@ public class GameSetupActivity extends AppCompatActivity{
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         //fab.setEnabled(false);  -> enabled for debugging
-        final EditText editText = (EditText) findViewById(R.id.editText);
 
 
         //set values for NumberPicker
-        NumberPicker players = (NumberPicker) findViewById(R.id.numberPicker);
+        final NumberPicker players = (NumberPicker) findViewById(R.id.numberPicker);
         players.setMinValue(8);
         players.setMaxValue(20);
 
-
-        TextWatcher textWatcher = new TextWatcher() {
+        //if value of the NumberPicker changes
+        players.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                setRecommendedNumberOfWer(picker.getValue());
+                calculateNumberDor(players);
+            }
+        });
+
+        //if value of the Spinner changes, recalculate numberDor
+        final Spinner spinnerWer = (Spinner) findViewById(R.id.spinnerWer);
+        spinnerWer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                calculateNumberDor(spinnerWer);
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onNothingSelected(AdapterView<?> parent) {
             }
+        });
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(editText.getText().toString().length()>0) {
-                    fab.setEnabled(true);
-                }
-                else {
-                    fab.setEnabled(false);
-                }
-            }
-        };
+        //initiate values
+        calculateNumberDor(players);
+    }
 
-        editText.addTextChangedListener(textWatcher);
+    public void setRecommendedNumberOfWer(int players){
 
+        if (players<12)
+            ((Spinner) findViewById(R.id.spinnerWer)).setSelection(1,true);
+        else if (players < 17)
+            ((Spinner) findViewById(R.id.spinnerWer)).setSelection(2, true);
+        else
+            ((Spinner) findViewById(R.id.spinnerWer)).setSelection(3, true);
+    }
+
+
+    // TODO: put calculateNumberDor and startGame into one function..
+
+    public void calculateNumberDor(View view){
+        Spinner spinnerWer = (Spinner) findViewById(R.id.spinnerWer);
+
+        int numberDor = ((NumberPicker) findViewById(R.id.numberPicker)).getValue();
+
+        //transform String to int and
+        switch ((String)spinnerWer.getSelectedItem()){
+            case "1": numberDor -= 1; break;
+            case "2": numberDor -= 2; break;
+            case "3": numberDor -= 3; break;
+            case "4": numberDor -= 4; break;
+            case "5": numberDor -= 5; break;
+        }
+
+        // TODO: Optimize this part...
+        //calculate number of extra roles
+        int numberExtra = 0;
+        if (((CheckBox) (findViewById(R.id.checkBoxAmo))).isChecked())
+            numberDor--;
+        if (((CheckBox) (findViewById(R.id.checkBoxDie))).isChecked())
+            numberDor++;
+        if (((CheckBox) (findViewById(R.id.checkBoxHex))).isChecked())
+            numberDor--;
+        if (((CheckBox) (findViewById(R.id.checkBoxMaed))).isChecked())
+            numberDor--;
+        if (((CheckBox) (findViewById(R.id.checkBoxSeh))).isChecked())
+            numberDor--;
+
+        ((TextView) findViewById(R.id.numberDor)).setText(" "+numberDor);
     }
 
     public void startGame(View view){
 
-        NumberPicker players = (NumberPicker) findViewById(R.id.numberPicker);
-        EditText name = (EditText) findViewById(R.id.editText);
+        String [] roles;
+        //array containing the roles, Dieb -> two more cards
+        if (((CheckBox) findViewById(R.id.checkBoxDie)).isChecked()) {
+            roles = new String[((NumberPicker) findViewById(R.id.numberPicker)).getValue() + 2];
+        }
+        else {
+            roles = new String[((NumberPicker) findViewById(R.id.numberPicker)).getValue()];
+        }
+        int i;
 
-        players.getValue();
+        //insert werewolves
+        int numberWer = 0;
+        switch ((String) ((Spinner) findViewById(R.id.spinnerWer)).getSelectedItem()){
+            case "1": numberWer = 1; break;
+            case "2": numberWer = 2; break;
+            case "3": numberWer = 3; break;
+            case "4": numberWer = 4; break;
+            case "5": numberWer = 5; break;
+        }
+        for (i=0; i<numberWer; i++){
+            roles[i] = "wer";
+        }
+
+        if (((CheckBox) (findViewById(R.id.checkBoxAmo))).isChecked())
+            roles[i++] = "Amo";
+        if (((CheckBox) (findViewById(R.id.checkBoxDie))).isChecked())
+            roles[i++] = "Die";
+        if (((CheckBox) (findViewById(R.id.checkBoxHex))).isChecked())
+            roles[i++] = "Hex";
+        if (((CheckBox) (findViewById(R.id.checkBoxMaed))).isChecked())
+            roles[i++] = "Maed";
+        if (((CheckBox) (findViewById(R.id.checkBoxSeh))).isChecked())
+            roles[i++] = "Seh";
+
+        for (i=i; i<roles.length-1; i++){
+            roles[i] = "Dor";
+        }
+
+
         Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra("players", players.getValue());
-        intent.putExtra("name", name.getText().toString());
+        intent.putExtra("roles", roles);
         startActivity(intent);
     }
 

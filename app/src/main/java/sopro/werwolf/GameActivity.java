@@ -32,19 +32,18 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        //get the number of Players
+        //get the roles
         Intent intent = getIntent();
-        int players = intent.getIntExtra("players", 8);
-        String name = intent.getStringExtra("name");
+        String[] roles = intent.getStringArrayExtra("roles");
 
         //View settings: Fullscreen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         //creates rows (Linear Layouts) and playerbuttons
-        createObjects(players);
+        createObjects(roles.length);
 
-        Snackbar.make(findViewById(R.id.gameView), "Willkommen im Spiel "+name, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(findViewById(R.id.gameView), "Willkommen im Spiel", Snackbar.LENGTH_LONG).show();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

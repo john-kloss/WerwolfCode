@@ -8,11 +8,27 @@
     <string name="settings">Einstellungen</string>
     <string name="title_activity_game">GameActivity</string>
     <string name="title_activity_game_setup">GameSetupActivity</string>
+    <string name="title_activity_settings">Einstellungen</string>
 
+    Game Setup
     <string name="game_settings">Spieleinstellungen</string>
-    <string name="game_name">Spielname</string>
     <string name="num_players">Spielerzahl</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="cardSelection">Kartenauswahl</string>
+    <string name="cardWer">Werwölfe</string>
+    <string name="cardSeh">Seherin</string>
+    <string name="cardMaed">Mädchen</string>
+    <string name="cardDie">Dieb</string>
+    <string name="cardHex">Hexe</string>
+    <string name="cardAmo">Amor</string>
+    <string name="cardDor">Dorfbewohner</string>
+    <string name="spinnerPrompt">Wähle die Anzahl der Werwölfe</string>
 
+    <string-array name="numbers">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
 
 </resources>

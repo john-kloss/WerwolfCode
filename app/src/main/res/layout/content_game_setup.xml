@@ -26,44 +26,177 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/game_name"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="44dp"
-        android:textSize="30dp"
-        android:paddingLeft="10dp" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/num_players"
         android:id="@+id/textView3"
         android:textSize="30sp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp" />
+        android:paddingRight="10dp"
+        android:layout_marginTop="37dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true" />
 
     <NumberPicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/numberPicker"
         android:divider="#3a1616"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/textView3"
-        android:layout_toEndOf="@+id/textView3"
-        android:transitionGroup="false" />
+        android:transitionGroup="false"
+        android:onClick="calculateNumberDor"
+        android:layout_alignTop="@+id/textView"
+        android:layout_toEndOf="@+id/textView3" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/numberPicker"
+        android:layout_alignStart="@+id/textView"
+        android:layout_marginTop="46dp"
+        android:id="@+id/tableLayout">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cardWer"
+                android:id="@+id/textView2"
+                android:layout_column="0" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerWer"
+                android:layout_column="1"
+                android:entries="@array/numbers"
+                android:prompt="@string/spinnerPrompt"
+                android:spinnerMode="dialog"
+                android:textAlignment="center" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cardAmo"
+                android:id="@+id/textView5"
+                android:layout_column="0" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBoxAmo"
+                android:layout_column="1"
+                android:checked="true"
+                android:onClick="calculateNumberDor" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="@string/cardSeh"
+                android:id="@+id/textView6"
+                android:layout_column="0" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBoxSeh"
+                android:layout_column="1"
+                android:checked="true"
+                android:onClick="calculateNumberDor" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="@string/cardMaed"
+                android:id="@+id/textView7"
+                android:layout_column="0" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBoxMaed"
+                android:layout_column="1"
+                android:checked="true"
+                android:onClick="calculateNumberDor" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="@string/cardDie"
+                android:id="@+id/textView8"
+                android:layout_column="0" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBoxDie"
+                android:layout_column="1"
+                android:checked="true"
+                android:onClick="calculateNumberDor" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="@string/cardHex"
+                android:id="@+id/textView9"
+                android:layout_column="0" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBoxHex"
+                android:layout_column="1"
+                android:checked="true"
+                android:nestedScrollingEnabled="false"
+                android:onClick="calculateNumberDor" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="@string/cardDor"
+                android:id="@+id/textView10"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/numberDor"
+                android:layout_column="1" />
+
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cardSelection"
+        android:id="@+id/textView4"
+        android:textSize="30sp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_below="@+id/numberPicker"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>
