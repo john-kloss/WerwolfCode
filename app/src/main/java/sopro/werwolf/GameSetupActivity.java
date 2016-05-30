@@ -108,13 +108,13 @@ public class GameSetupActivity extends AppCompatActivity{
 
     public void startGame(View view){
 
-        String [] roles;
-        //array containing the roles, Dieb -> two more cards
+        String [] cards;
+        //array containing the cards, Dieb -> two more cards
         if (((CheckBox) findViewById(R.id.checkBoxDie)).isChecked()) {
-            roles = new String[((NumberPicker) findViewById(R.id.numberPicker)).getValue() + 2];
+            cards = new String[((NumberPicker) findViewById(R.id.numberPicker)).getValue() + 2];
         }
         else {
-            roles = new String[((NumberPicker) findViewById(R.id.numberPicker)).getValue()];
+            cards = new String[((NumberPicker) findViewById(R.id.numberPicker)).getValue()];
         }
         int i;
 
@@ -128,27 +128,27 @@ public class GameSetupActivity extends AppCompatActivity{
             case "5": numberWer = 5; break;
         }
         for (i=0; i<numberWer; i++){
-            roles[i] = "wer";
+            cards[i] = "wer";
         }
 
         if (((CheckBox) (findViewById(R.id.checkBoxAmo))).isChecked())
-            roles[i++] = "Amo";
+            cards[i++] = "Amo";
         if (((CheckBox) (findViewById(R.id.checkBoxDie))).isChecked())
-            roles[i++] = "Die";
+            cards[i++] = "Die";
         if (((CheckBox) (findViewById(R.id.checkBoxHex))).isChecked())
-            roles[i++] = "Hex";
+            cards[i++] = "Hex";
         if (((CheckBox) (findViewById(R.id.checkBoxMaed))).isChecked())
-            roles[i++] = "Maed";
+            cards[i++] = "Maed";
         if (((CheckBox) (findViewById(R.id.checkBoxSeh))).isChecked())
-            roles[i++] = "Seh";
+            cards[i++] = "Seh";
 
-        for (i=i; i<roles.length-1; i++){
-            roles[i] = "Dor";
+        for (i=i; i<cards.length-1; i++){
+            cards[i] = "Dor";
         }
 
 
         Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra("roles", roles);
+        intent.putExtra("cards", cards);
         startActivity(intent);
     }
 

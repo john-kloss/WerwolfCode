@@ -1,47 +1,46 @@
 package sopro.werwolf;
 
-import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
 
 public class GameActivity extends AppCompatActivity {
 
-    Button currentlySelectedButton;
+    Button currentlySelectedPlayer;
 
     //string contains phases, counter keeps track of current phase
     String[] phase = {"tag","dieb","amor","werwoelfe","seherin","hexe"};
     int phasecounter = 0;
+
+    String lover1, lover2, victimWer, victimHex, victimSeh;
+
+    // TODO: save game status
+    boolean gifttrank = true;
+    boolean heiltrank = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        //get the roles
+        //get the cards
         Intent intent = getIntent();
-        String[] roles = intent.getStringArrayExtra("roles");
+        String[] cards = intent.getStringArrayExtra("cards");
 
         //View settings: Fullscreen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         //creates rows (Linear Layouts) and playerbuttons
-        createObjects(roles.length);
+        createObjects(cards.length);
 
         Snackbar.make(findViewById(R.id.gameView), "Willkommen im Spiel", Snackbar.LENGTH_LONG).show();
 
@@ -49,7 +48,7 @@ public class GameActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                nextPhase();
+                confirm();
             }
         });
     }
@@ -103,36 +102,121 @@ public class GameActivity extends AppCompatActivity {
         }
 
         //if button was already selected, unselect it
-        if(button.equals(currentlySelectedButton)) {
-            currentlySelectedButton = null;
+        if(button.equals(currentlySelectedPlayer)) {
+            currentlySelectedPlayer = null;
         }
         //otherwise select it
         else{
-            currentlySelectedButton = button;
-            Snackbar.make(view, "Du hast "+ button.getText().toString() +" ausgewählt", Snackbar.LENGTH_LONG).show();
+            currentlySelectedPlayer = button;
             button.setBackgroundColor(getResources().getColor(R.color.button_material_dark));
         }
     }
 
+    private void confirm(){
+        if (currentlySelectedPlayer != null) {
+            switch (phase[phasecounter]) {
+                case "tag":
+
+                    nextPhase();
+
+                    break;
+
+                case "dieb":
+                    //get selected card
+
+                    //remove from phase array
+                    phase[phasecounter] = "";
+
+                    nextPhase();
+
+                    break;
+
+                case "amor":
+
+                    //select lover1 first, then lover2 and go to nextPhase (!)afterwards(!)
+                    if (lover1 == null) {
+                        lover1 = currentlySelectedPlayer.getText().toString();
+                        Snackbar.make(currentlySelectedPlayer, "Du hast " + lover1 + " ausgewählt", Snackbar.LENGTH_LONG).show();
+                    }
+                    else {
+                        lover2 = currentlySelectedPlayer.getText().toString();
+                        Snackbar.make(currentlySelectedPlayer, lover1 + " hat sich in " + lover2 + " verliebt", Snackbar.LENGTH_LONG).show();
+
+                        //make the system wait for 3 seconds before starting new phase
+                        Handler mHandler = new Handler();
+                        mHandler.postDelayed(new Runnable() {
+                            public void run() {
+                                //remove from phase array
+                                phase[phasecounter] = "";
+                                nextPhase();
+                            }
+                        }, 3000);
+                    }
+                    break;
+
+
+                case "werwoelfe":
+
+                    victimWer = currentlySelectedPlayer.getText().toString();
+                    Snackbar.make(currentlySelectedPlayer, "Du hast " + victimWer + " ausgewählt", Snackbar.LENGTH_LONG).show();
+
+                    nextPhase();
+                    break;
+
+                case "seherin":
+                    victimSeh = currentlySelectedPlayer.getText().toString();
+                    // TODO: get the player
+                    Snackbar.make(currentlySelectedPlayer, victimSeh + " ist ...", Snackbar.LENGTH_LONG).show();
+                    nextPhase();
+                    break;
+
+                case "hexe":
+                    nextPhase();
+
+                    break;
+
+                default:
+                    nextPhase();
+            }
+        }
+    }
+
     private void nextPhase(){
+
+
         //next phase modulo the number of phases
         phasecounter = (phasecounter+1) % phase.length;
+
+        //make all buttons transparent
+        ViewGroup gameView =(ViewGroup) findViewById(R.id.gameView);
+        for (int i=0; i < gameView.getChildCount(); i++){
+            LinearLayout row = (LinearLayout) gameView.getChildAt(i);
+            for (int j=0; j < row.getChildCount(); j++){
+                Button currentButton = (Button) row.getChildAt(j);
+                currentButton.setBackgroundColor(0);
+            }
+        }
+        currentlySelectedPlayer = null;
 
         //action based on phase
         switch (phase[phasecounter]){
             case "tag":
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.tag));
                 Snackbar.make(findViewById(R.id.gameView), "Es ist Tag - Wähle eine Person, die du hängen möchtest", Snackbar.LENGTH_LONG).show();
+                // TODO: wait for pecentage range to be reached
                 break;
 
             case "dieb":
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.dieb));
                 Snackbar.make(findViewById(R.id.gameView), "Dieb - wähle eine neue Identität", Snackbar.LENGTH_LONG).show();
+                // TODO: show to cards
                 break;
 
             case "amor":
+                // TODO: select two players somehow
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.amor));
                 Snackbar.make(findViewById(R.id.gameView), "Amor - wähle zwei Personen, die sich ineinander verlieben", Snackbar.LENGTH_LONG).show();
+
                 break;
 
             case "werwoelfe":
@@ -157,7 +241,12 @@ public class GameActivity extends AppCompatActivity {
                 // TODO: save choice
                 break;
 
+            default:
+                nextPhase();
+
         }
+
+
 
 
     }
