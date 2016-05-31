@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="sopro.werwolf.MainActivity"
-    android:background="@drawable/werewolf">
+    tools:context="sopro.werwolf.MainActivity">
 
     <include layout="@layout/content_main" />
 
