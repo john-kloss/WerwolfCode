@@ -3,6 +3,7 @@ package sopro.werwolf;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,15 +13,26 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.util.ArrayList;
 
-public class GameSetupActivity extends AppCompatActivity{
+public class GameSetupActivity extends AppCompatActivity {
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +72,15 @@ public class GameSetupActivity extends AppCompatActivity{
 
         //initiate values
         calculateNumberDor(players);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    public void setRecommendedNumberOfWer(int players){
+    public void setRecommendedNumberOfWer(int players) {
 
-        if (players<12)
-            ((Spinner) findViewById(R.id.spinnerWer)).setSelection(1,true);
+        if (players < 12)
+            ((Spinner) findViewById(R.id.spinnerWer)).setSelection(1, true);
         else if (players < 17)
             ((Spinner) findViewById(R.id.spinnerWer)).setSelection(2, true);
         else
@@ -75,18 +90,28 @@ public class GameSetupActivity extends AppCompatActivity{
 
     // TODO: put calculateNumberDor and startGame into one function..
 
-    public void calculateNumberDor(View view){
+    public void calculateNumberDor(View view) {
         Spinner spinnerWer = (Spinner) findViewById(R.id.spinnerWer);
 
         int numberDor = ((NumberPicker) findViewById(R.id.numberPicker)).getValue();
 
         //transform String to int and
-        switch ((String)spinnerWer.getSelectedItem()){
-            case "1": numberDor -= 1; break;
-            case "2": numberDor -= 2; break;
-            case "3": numberDor -= 3; break;
-            case "4": numberDor -= 4; break;
-            case "5": numberDor -= 5; break;
+        switch ((String) spinnerWer.getSelectedItem()) {
+            case "1":
+                numberDor -= 1;
+                break;
+            case "2":
+                numberDor -= 2;
+                break;
+            case "3":
+                numberDor -= 3;
+                break;
+            case "4":
+                numberDor -= 4;
+                break;
+            case "5":
+                numberDor -= 5;
+                break;
         }
 
         // TODO: Optimize this part...
@@ -103,31 +128,40 @@ public class GameSetupActivity extends AppCompatActivity{
         if (((CheckBox) (findViewById(R.id.checkBoxSeh))).isChecked())
             numberDor--;
 
-        ((TextView) findViewById(R.id.numberDor)).setText(" "+numberDor);
+        ((TextView) findViewById(R.id.numberDor)).setText(" " + numberDor);
     }
 
-    public void startGame(View view){
+    public void startGame(View view) {
 
-        String [] cards;
+        String[] cards;
         //array containing the cards, Dieb -> two more cards
         if (((CheckBox) findViewById(R.id.checkBoxDie)).isChecked()) {
             cards = new String[((NumberPicker) findViewById(R.id.numberPicker)).getValue() + 2];
-        }
-        else {
+        } else {
             cards = new String[((NumberPicker) findViewById(R.id.numberPicker)).getValue()];
         }
         int i;
 
         //insert werewolves
         int numberWer = 0;
-        switch ((String) ((Spinner) findViewById(R.id.spinnerWer)).getSelectedItem()){
-            case "1": numberWer = 1; break;
-            case "2": numberWer = 2; break;
-            case "3": numberWer = 3; break;
-            case "4": numberWer = 4; break;
-            case "5": numberWer = 5; break;
+        switch ((String) ((Spinner) findViewById(R.id.spinnerWer)).getSelectedItem()) {
+            case "1":
+                numberWer = 1;
+                break;
+            case "2":
+                numberWer = 2;
+                break;
+            case "3":
+                numberWer = 3;
+                break;
+            case "4":
+                numberWer = 4;
+                break;
+            case "5":
+                numberWer = 5;
+                break;
         }
-        for (i=0; i<numberWer; i++){
+        for (i = 0; i < numberWer; i++) {
             cards[i] = "wer";
         }
 
@@ -142,7 +176,7 @@ public class GameSetupActivity extends AppCompatActivity{
         if (((CheckBox) (findViewById(R.id.checkBoxSeh))).isChecked())
             cards[i++] = "Seh";
 
-        for (i=i; i<cards.length-1; i++){
+        for (i = i; i < cards.length - 1; i++) {
             cards[i] = "Dor";
         }
 
@@ -152,4 +186,43 @@ public class GameSetupActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "GameSetup Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://sopro.werwolf/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "GameSetup Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://sopro.werwolf/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
 }

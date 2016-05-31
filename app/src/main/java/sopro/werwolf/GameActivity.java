@@ -73,7 +73,7 @@ public class GameActivity extends AppCompatActivity {
                 }
             };
             button.setOnClickListener(onClickListener);
-            button.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.mipmap.ic_launcher, 0, 0);
+            //button.setCompoundDrawablesRelativeWithIntrinsicBounds(0, R.mipmap.ic_launcher, 0, 0);
 
             //insert into rows (Linear Layouts)
             if (i < 5)
@@ -242,6 +242,7 @@ public class GameActivity extends AppCompatActivity {
                 break;
 
             default:
+                // TODO: 31.05.2016  
                 nextPhase();
 
         }
