@@ -16,6 +16,7 @@ public class GameActivity extends AppCompatActivity {
 
     Button currentlySelectedPlayer;
 
+    // TODO: 31.05.16  
     //string contains phases, counter keeps track of current phase
     String[] phase = {"tag","dieb","amor","werwoelfe","seherin","hexe"};
     int phasecounter = 0;
