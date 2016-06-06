@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -143,10 +145,14 @@ public class GameActivity extends AppCompatActivity {
                         lover2 = currentlySelectedPlayer.getText().toString();
                         Snackbar.make(currentlySelectedPlayer, lover1 + " hat sich in " + lover2 + " verliebt", Snackbar.LENGTH_LONG).show();
 
+                        //disable fab till next phase is created
+                        ((FloatingActionButton) findViewById(R.id.fab)).setEnabled(false);
+
                         //make the system wait for 3 seconds before starting new phase
                         Handler mHandler = new Handler();
                         mHandler.postDelayed(new Runnable() {
                             public void run() {
+                                ((FloatingActionButton) findViewById(R.id.fab)).setEnabled(true);
                                 //remove from phase array
                                 phase[phasecounter] = "";
                                 nextPhase();
@@ -172,6 +178,13 @@ public class GameActivity extends AppCompatActivity {
                     break;
 
                 case "hexe":
+
+                    // TODO: two selection buttons
+                    // TODO: save choice
+                    Snackbar.make(findViewById(R.id.gameView), "Hexe - möchtest du deinen Gifttrank verwenden?", Snackbar.LENGTH_LONG).show();
+                    // TODO: two selection buttons
+                    // TODO: save choice
+
                     nextPhase();
 
                     break;
@@ -216,7 +229,7 @@ public class GameActivity extends AppCompatActivity {
             case "amor":
                 // TODO: select two players somehow
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.amor));
-                Snackbar.make(findViewById(R.id.gameView), "Amor - wähle zwei Personen, die sich ineinander verlieben", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.gameView), "Amor - wähle (nacheinander) zwei Personen, die sich ineinander verlieben", Snackbar.LENGTH_LONG).show();
 
                 break;
 
@@ -234,16 +247,16 @@ public class GameActivity extends AppCompatActivity {
             case "hexe":
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.hexe));
                 Snackbar.make(findViewById(R.id.gameView), "Hexe - du siehst nun das Opfer der Nacht. Möchtest du deinen Heiltrank benutzen?", Snackbar.LENGTH_LONG).show();
-                // TODO: show victim 
-                // TODO: two selection buttons
-                // TODO: save choice
-                Snackbar.make(findViewById(R.id.gameView), "Hexe - möchtest du deinen Gifttrank verwenden?", Snackbar.LENGTH_LONG).show();
-                // TODO: two selection buttons
-                // TODO: save choice
+                // TODO: show victim
+                TextView victimView = new TextView(getBaseContext());
+                victimView.setText("Das Opfer der Werwölfe in dieser Nacht ist ...");
+                PopupWindow popupWindow = new PopupWindow((View) victimView);
+                popupWindow.isShowing();
+
                 break;
 
             default:
-                // TODO: 31.05.2016  
+
                 nextPhase();
 
         }
