@@ -120,6 +120,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void confirm(){
+        // TODO: check for dead players
         if (currentlySelectedPlayer != null) {
             switch (phase[phasecounter]) {
                 case "tag":
@@ -144,7 +145,7 @@ public class GameActivity extends AppCompatActivity {
                         lover1 = currentlySelectedPlayer.getText().toString();
                         Snackbar.make(currentlySelectedPlayer, "Du hast " + lover1 + " ausgewählt", Snackbar.LENGTH_LONG).show();
                     }
-                    else if (!lover1.equals(currentlySelectedPlayer)){
+                    else if (!lover1.equals(currentlySelectedPlayer.getText())){
                         lover2 = currentlySelectedPlayer.getText().toString();
                         Snackbar.make(currentlySelectedPlayer, lover1 + " hat sich in " + lover2 + " verliebt", Snackbar.LENGTH_LONG).show();
 
@@ -174,38 +175,58 @@ public class GameActivity extends AppCompatActivity {
                     break;
 
                 case "seherin":
-                    victimSeh = currentlySelectedPlayer.getText().toString();
-                    // TODO: get the player
-
-                    Snackbar.make(currentlySelectedPlayer, victimSeh + " ist ...", Snackbar.LENGTH_LONG).show();
-                    nextPhase();
+                    if (victimSeh == null) {
+                        victimSeh = currentlySelectedPlayer.getText().toString();
+                        // TODO: get the role...
+                        popupinfo(victimSeh + " ist ein ...");
+                    }
+                    else {
+                        victimSeh = null;
+                        nextPhase();
+                    }
                     break;
 
                 case "hexe":
 
-                    //execute if there is no decision on the save yet
-                    if (decisHexHeil == null){
+                    //execute if there is no decision on the 'heiltrank' yet
+                    if (decisHexHeil == null && heiltrank){
                         popupchoice("Möchtest du das Opfer retten?", "decisHexHeil");
                     }
                     //otherwise ask if the 'gifttrank' should be used
-                    else if (decisHexGift == null) {
+                    else if (decisHexGift == null && gifttrank) {
                         popupchoice("Möchtest du deinen Gifttrank verwenden?", "decisHexGift");
                     }
-
                     else {
-                        if (decisHexGift){
-                            //gifttrank used
-                            gifttrank = false;
-                            currentlySelectedPlayer = null;
-                            //to enter the else part below the next time this method is called
-                            decisHexGift = false;
+                        if (heiltrank){
+                            if (decisHexHeil){
+                                victimWer = null;
+                                heiltrank = false;
+                            }
                         }
 
+                        if (gifttrank){
+                            if(decisHexGift) {
+                                //gifttrank used
+                                gifttrank = false;
+                                //so you have to choose a new player
+                                currentlySelectedPlayer = null;
+                                //to enter the else part below the next time this method is called
+                                decisHexGift = false;
+                            }
+
+                            else{
+                                decisHexGift = null;
+                                decisHexHeil = null;
+                                nextPhase();
+                            }
+                        }
+                        //no 'gifttrank' available
                         else{
                             decisHexGift = null;
                             decisHexHeil = null;
                             nextPhase();
                         }
+
                     }
 
                     break;
