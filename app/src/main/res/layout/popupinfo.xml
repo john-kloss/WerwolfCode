@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/MainBackground">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textViewPopup"
+        android:id="@+id/textViewPopupInfo"
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/SizeButtonText"/>
 
@@ -15,9 +15,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="OK"
-        android:layout_centerHorizontal="true"
         android:id="@+id/buttonPopup"
-        android:layout_below="@+id/textViewPopup"/>
+        android:layout_below="@+id/textViewPopupInfo"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

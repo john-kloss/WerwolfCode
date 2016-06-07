@@ -27,6 +27,7 @@ public class GameActivity extends AppCompatActivity {
     int phasecounter = 0;
 
     String lover1, lover2, victimWer, victimHex, victimSeh;
+    Boolean decisHexHeil, decisHexGift;
 
     // TODO: save game status in data base
     boolean gifttrank = true;
@@ -123,8 +124,9 @@ public class GameActivity extends AppCompatActivity {
             switch (phase[phasecounter]) {
                 case "tag":
 
-                    nextPhase();
+                    // TODO: implement day
 
+                    nextPhase();
                     break;
 
                 case "dieb":
@@ -132,9 +134,7 @@ public class GameActivity extends AppCompatActivity {
 
                     //remove from phase array
                     phase[phasecounter] = "";
-
                     nextPhase();
-
                     break;
 
                 case "amor":
@@ -144,7 +144,7 @@ public class GameActivity extends AppCompatActivity {
                         lover1 = currentlySelectedPlayer.getText().toString();
                         Snackbar.make(currentlySelectedPlayer, "Du hast " + lover1 + " ausgewählt", Snackbar.LENGTH_LONG).show();
                     }
-                    else {
+                    else if (!lover1.equals(currentlySelectedPlayer)){
                         lover2 = currentlySelectedPlayer.getText().toString();
                         Snackbar.make(currentlySelectedPlayer, lover1 + " hat sich in " + lover2 + " verliebt", Snackbar.LENGTH_LONG).show();
 
@@ -176,24 +176,39 @@ public class GameActivity extends AppCompatActivity {
                 case "seherin":
                     victimSeh = currentlySelectedPlayer.getText().toString();
                     // TODO: get the player
+
                     Snackbar.make(currentlySelectedPlayer, victimSeh + " ist ...", Snackbar.LENGTH_LONG).show();
                     nextPhase();
                     break;
 
                 case "hexe":
 
-                    // TODO: two selection buttons
-                    // TODO: save choice
-                    Snackbar.make(findViewById(R.id.gameView), "Hexe - möchtest du deinen Gifttrank verwenden?", Snackbar.LENGTH_LONG).show();
-                    // TODO: two selection buttons
-                    // TODO: save choice
+                    //execute if there is no decision on the save yet
+                    if (decisHexHeil == null){
+                        popupchoice("Möchtest du das Opfer retten?", "decisHexHeil");
+                    }
+                    //otherwise ask if the 'gifttrank' should be used
+                    else if (decisHexGift == null) {
+                        popupchoice("Möchtest du deinen Gifttrank verwenden?", "decisHexGift");
+                    }
 
-                    nextPhase();
+                    else {
+                        if (decisHexGift){
+                            //gifttrank used
+                            gifttrank = false;
+                            currentlySelectedPlayer = null;
+                            //to enter the else part below the next time this method is called
+                            decisHexGift = false;
+                        }
+
+                        else{
+                            decisHexGift = null;
+                            decisHexHeil = null;
+                            nextPhase();
+                        }
+                    }
 
                     break;
-
-                default:
-                    nextPhase();
             }
         }
     }
@@ -213,7 +228,10 @@ public class GameActivity extends AppCompatActivity {
                 currentButton.setBackgroundColor(0);
             }
         }
-        currentlySelectedPlayer = null;
+
+        //leave selection in this case
+        if (!phase[phasecounter].equals("hexe"))
+            currentlySelectedPlayer = null;
 
         //action based on phase
         switch (phase[phasecounter]){
@@ -249,26 +267,9 @@ public class GameActivity extends AppCompatActivity {
 
             case "hexe":
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.hexe));
-                Snackbar.make(findViewById(R.id.gameView), "Hexe - du siehst nun das Opfer der Nacht. Möchtest du deinen Heiltrank benutzen?", Snackbar.LENGTH_LONG).show();
-
-                //create popupInfo
-                LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                //inflate the popupInfoInfo.xml
-                View popupView = getLayoutInflater().inflate(R.layout.popupInfo, null);
-                final PopupWindow pw = new PopupWindow(popupView, gameView.getWidth()/2, gameView.getHeight()/2, true);
-
-                TextView textViewPopup = (TextView) popupView.findViewById(R.id.textViewPopup);
-                Button button = (Button) popupView.findViewById(R.id.buttonPopup);
-
-                pw.showAtLocation(findViewById(R.id.activityGame), Gravity.CENTER, 0 ,0);
-
-                textViewPopup.setText("Das Opfer der Werwölfe in dieser Nacht ist ...");
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        pw.dismiss();
-                    }
-                });
+                //show
+                popupinfo("Das Opfer der Werwölfe in dieser Nacht ist ..." + victimWer);
+                Snackbar.make(findViewById(R.id.gameView), "Hexe - du siehst nun das Opfer der Nacht.", Snackbar.LENGTH_LONG).show();
 
                 break;
 
@@ -277,9 +278,80 @@ public class GameActivity extends AppCompatActivity {
                 nextPhase();
 
         }
+    }
 
+    /* creates a popup containing information */
+    public void popupinfo(String info){
 
+        ViewGroup gameView =(ViewGroup) findViewById(R.id.gameView);
+        //inflate the popupinfo.xml
+        View popupView = getLayoutInflater().inflate(R.layout.popupinfo, null);
+        final PopupWindow pw = new PopupWindow(popupView, gameView.getWidth()/2, gameView.getHeight()/2, true);
 
+        TextView textViewPopup = (TextView) popupView.findViewById(R.id.textViewPopupInfo);
+        Button button = (Button) popupView.findViewById(R.id.buttonPopup);
+        textViewPopup.setText(info);
+
+        pw.showAtLocation(findViewById(R.id.activityGame), Gravity.CENTER, 0 ,0);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pw.dismiss();
+                confirm();
+            }
+        });
+    }
+
+    /* creates a popup offering you a choice */
+    public void popupchoice(String info, final String toBeDecided){
+
+        ViewGroup gameView =(ViewGroup) findViewById(R.id.gameView);
+        //inflate the popupchoice.xml
+        View popupView = getLayoutInflater().inflate(R.layout.popupchoice, null);
+        final PopupWindow pw = new PopupWindow(popupView, gameView.getWidth()/2, gameView.getHeight()/2, true);
+
+        TextView textViewPopup = (TextView) popupView.findViewById(R.id.textViewPopupChoice);
+        Button buttonYes = (Button) popupView.findViewById(R.id.buttonPopupYes);
+        Button buttonNo = (Button) popupView.findViewById(R.id.buttonPopupNo);
+        textViewPopup.setText(info);
+
+        pw.showAtLocation(findViewById(R.id.activityGame), Gravity.CENTER, 0 ,0);
+
+        buttonYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pw.dismiss();
+                popup_callback(true, toBeDecided);
+
+            }
+        });
+
+        buttonNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pw.dismiss();
+                popup_callback(false, toBeDecided);
+
+            }
+        });
 
     }
+
+
+    /* action based on chosen value in popup */
+    public void popup_callback(Boolean choice, String toBeDecided){
+        switch (toBeDecided){
+            case "decisHexHeil":
+                decisHexHeil = choice;
+                break;
+
+            case "decisHexGift":
+                decisHexGift = choice;
+                break;
+        }
+        confirm();
+    }
+
+
 }
