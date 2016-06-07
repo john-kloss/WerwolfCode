@@ -1,11 +1,14 @@
 package sopro.werwolf;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -18,14 +21,14 @@ public class GameActivity extends AppCompatActivity {
 
     Button currentlySelectedPlayer;
 
-    // TODO: 31.05.16  
+
     //string contains phases, counter keeps track of current phase
     String[] phase = {"tag","dieb","amor","werwoelfe","seherin","hexe"};
     int phasecounter = 0;
 
     String lover1, lover2, victimWer, victimHex, victimSeh;
 
-    // TODO: save game status
+    // TODO: save game status in data base
     boolean gifttrank = true;
     boolean heiltrank = true;
 
@@ -157,7 +160,7 @@ public class GameActivity extends AppCompatActivity {
                                 phase[phasecounter] = "";
                                 nextPhase();
                             }
-                        }, 3000);
+                        }, 500);
                     }
                     break;
 
@@ -247,11 +250,25 @@ public class GameActivity extends AppCompatActivity {
             case "hexe":
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.hexe));
                 Snackbar.make(findViewById(R.id.gameView), "Hexe - du siehst nun das Opfer der Nacht. Möchtest du deinen Heiltrank benutzen?", Snackbar.LENGTH_LONG).show();
-                // TODO: show victim
-                TextView victimView = new TextView(getBaseContext());
-                victimView.setText("Das Opfer der Werwölfe in dieser Nacht ist ...");
-                PopupWindow popupWindow = new PopupWindow((View) victimView);
-                popupWindow.isShowing();
+
+                //create popupInfo
+                LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                //inflate the popupInfoInfo.xml
+                View popupView = getLayoutInflater().inflate(R.layout.popupInfo, null);
+                final PopupWindow pw = new PopupWindow(popupView, gameView.getWidth()/2, gameView.getHeight()/2, true);
+
+                TextView textViewPopup = (TextView) popupView.findViewById(R.id.textViewPopup);
+                Button button = (Button) popupView.findViewById(R.id.buttonPopup);
+
+                pw.showAtLocation(findViewById(R.id.activityGame), Gravity.CENTER, 0 ,0);
+
+                textViewPopup.setText("Das Opfer der Werwölfe in dieser Nacht ist ...");
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pw.dismiss();
+                    }
+                });
 
                 break;
 

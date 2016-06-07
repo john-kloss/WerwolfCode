@@ -6,4 +6,5 @@ package sopro.werwolf;
 public class GameAction {
 
 
+
 }
