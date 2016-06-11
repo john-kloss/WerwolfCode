@@ -51,6 +51,7 @@ public class GameActivity extends AppCompatActivity {
 
         Snackbar.make(findViewById(R.id.gameView), "Willkommen im Spiel", Snackbar.LENGTH_LONG).show();
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +96,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void playerSelected(View view){
-        boolean alreadyClicked = false;
         Button button = (Button) view;
 
         //make all buttons transparent
@@ -143,9 +143,11 @@ public class GameActivity extends AppCompatActivity {
                     //select lover1 first, then lover2 and go to nextPhase (!)afterwards(!)
                     if (lover1 == null) {
                         lover1 = currentlySelectedPlayer.getText().toString();
-                        Snackbar.make(currentlySelectedPlayer, "Du hast " + lover1 + " ausgewählt", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(currentlySelectedPlayer, "Du hast "+lover1+" ausgewählt",Snackbar.LENGTH_LONG).show();
+                        popupinfo("Wähle nun die zweite Person");
                     }
                     else if (!lover1.equals(currentlySelectedPlayer.getText())){
+
                         lover2 = currentlySelectedPlayer.getText().toString();
                         Snackbar.make(currentlySelectedPlayer, lover1 + " hat sich in " + lover2 + " verliebt", Snackbar.LENGTH_LONG).show();
 
@@ -271,13 +273,15 @@ public class GameActivity extends AppCompatActivity {
             case "amor":
                 // TODO: select two players somehow
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.amor));
-                Snackbar.make(findViewById(R.id.gameView), "Amor - wähle (nacheinander) zwei Personen, die sich ineinander verlieben", Snackbar.LENGTH_LONG).show();
+                popupinfo("Amor - bestimme das Liebespaar. Wähle nun die erste Person");
+
 
                 break;
 
             case "werwoelfe":
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.werwoelfe));
-                Snackbar.make(findViewById(R.id.gameView), "Werwolf - wähle eine Person, die du töten möchtest", Snackbar.LENGTH_LONG).show();
+                popupinfo("Werwölfe - wählt eine Person, die ihr töten möchtet");
+
                 break;
 
             case "seherin":
