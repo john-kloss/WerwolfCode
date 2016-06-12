@@ -9,7 +9,8 @@ public class DatabaseEntry {
     public String name;
     public String role;
     public boolean team;
-    public String lover;
+    public String lover1;
+    public String lover2;
     public String image;
     public boolean alive;
 
@@ -25,8 +26,11 @@ public class DatabaseEntry {
     public boolean getTeam(){ return team;}
     public void setTeam(boolean team){this.team = team;}
 
-    public String getLover(){ return lover;}
-    public void setLover(String lover){this.lover = lover;}
+    public String getLover1(){ return lover1;}
+    public void setLover1(String lover1){this.lover1 = lover1;}
+
+    public String getLover2(){ return lover2;}
+    public void setLover2(String lover2){this.lover2 = lover2;}
 
     public String getImage(){ return image;}
     public void setImage(String image){this.image = image;}

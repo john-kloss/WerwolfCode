@@ -133,6 +133,7 @@ public class GameActivity extends AppCompatActivity {
                 case "dieb":
                     //get selected card
 
+
                     //remove from phase array
                     phase[phasecounter] = "";
                     nextPhase();
@@ -377,6 +378,5 @@ public class GameActivity extends AppCompatActivity {
         }
         confirm();
     }
-
 
 }
