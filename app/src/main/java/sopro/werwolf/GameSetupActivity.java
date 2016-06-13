@@ -25,6 +25,7 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GameSetupActivity extends AppCompatActivity {
 
@@ -162,27 +163,40 @@ public class GameSetupActivity extends AppCompatActivity {
                 break;
         }
         for (i = 0; i < numberWer; i++) {
-            cards[i] = "wer";
+            cards[i] = "werwolf";
         }
 
         if (((CheckBox) (findViewById(R.id.checkBoxAmo))).isChecked())
-            cards[i++] = "Amo";
+            cards[i++] = "amor";
         if (((CheckBox) (findViewById(R.id.checkBoxDie))).isChecked())
-            cards[i++] = "Die";
+            cards[i++] = "dieb";
         if (((CheckBox) (findViewById(R.id.checkBoxHex))).isChecked())
-            cards[i++] = "Hex";
+            cards[i++] = "hexe";
         if (((CheckBox) (findViewById(R.id.checkBoxMaed))).isChecked())
-            cards[i++] = "Maed";
+            cards[i++] = "maedchen";
         if (((CheckBox) (findViewById(R.id.checkBoxSeh))).isChecked())
-            cards[i++] = "Seh";
+            cards[i++] = "seherin";
 
-        for (i = i; i < cards.length - 1; i++) {
-            cards[i] = "Dor";
+        for (i = i; i < cards.length; i++) {
+            cards[i] = "dorfbewohner";
+        }
+
+        String[] cardsShuffled = new String[i];
+        //shuffle roles
+        for (int j = 0; j<i ; j++){
+            //pick a random number in array
+            Random random = new Random();
+            int value = random.nextInt(i);
+            //move on till an empty slot is found
+            while(cardsShuffled[value]!=null)
+                value=(value+1)%i;
+
+            cardsShuffled[value] = cards[j];
         }
 
 
         Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra("cards", cards);
+        intent.putExtra("cards", cardsShuffled);
         startActivity(intent);
     }
 

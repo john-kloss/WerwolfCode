@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,11 +25,12 @@ public class GameActivity extends AppCompatActivity {
 
 
     //string contains phases, counter keeps track of current phase
-    String[] phase = {"tag","dieb","amor","werwoelfe","seherin","hexe"};
+    String[] phase = new String[10];
     int phasecounter = 0;
 
-    String lover1, lover2, victimWer, victimHex, victimSeh;
+    String lover1, lover2, victimWer, victimHex, victimSeh, decisDieb;
     Boolean decisHexHeil, decisHexGift;
+    String[] cards;
 
     // TODO: save game status in data base
     boolean gifttrank = true;
@@ -40,7 +43,8 @@ public class GameActivity extends AppCompatActivity {
 
         //get the cards
         Intent intent = getIntent();
-        String[] cards = intent.getStringArrayExtra("cards");
+        cards = intent.getStringArrayExtra("cards");
+
 
         //View settings: Fullscreen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -61,7 +65,13 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
-
+    /*
+    * >createObjects<
+    *
+    * This method creates all objects in the GameView.
+    * Like rows, button, ...
+    *
+    */
     private void createObjects(int players){
         //create Linear Layouts in gameView
         LinearLayout row1 = (LinearLayout) findViewById(R.id.row1);
@@ -93,7 +103,28 @@ public class GameActivity extends AppCompatActivity {
             else
                 row4.addView(button);
         }
+
+        //set up the phases
+        phase[0] = "tag";
+        String[] searchFor = {"tag", "dieb", "amor", "werwolf", "seherin", "hexe"};
+        for (int j=1; j<searchFor.length;) {
+            for (int i = 0; i < cards.length; i++) {
+                if (cards[i].equals(searchFor[j])) {
+                    phase[j] = cards[i];
+                }
+            }
+            j++;
+        }
     }
+
+    /*
+    * >playerSelected<
+    *
+    * This method is called if a playerButton gets selected.
+    * It toggles the background transparency and
+    * updates currentlySelectedPlayer.
+    *
+    */
 
     public void playerSelected(View view){
         Button button = (Button) view;
@@ -118,6 +149,18 @@ public class GameActivity extends AppCompatActivity {
             button.setBackgroundColor(getResources().getColor(R.color.button_material_dark));
         }
     }
+
+    /*
+    * >confirm<
+    *
+    * This method is the onClick method of the FloatingActionButton (fab)
+    * which is clicked if a player wants to confirm the selection.
+    *
+    * It saves the selection and runs the following commands waiting for the next confirm.
+    * In the end it always calls nextPhase();
+    *
+    *
+     */
 
     private void confirm(){
         // TODO: check for dead players
@@ -169,7 +212,7 @@ public class GameActivity extends AppCompatActivity {
                     break;
 
 
-                case "werwoelfe":
+                case "werwolf":
 
                     victimWer = currentlySelectedPlayer.getText().toString();
                     Snackbar.make(currentlySelectedPlayer, "Du hast " + victimWer + " ausgewählt", Snackbar.LENGTH_LONG).show();
@@ -238,11 +281,22 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    * >nextPhase<
+    *
+    * Is executed if the game enters a new phase.
+    * Increases phasecounter by one.
+    * Resets the buttons.
+    *
+     */
+
     private void nextPhase(){
 
 
         //next phase modulo the number of phases
         phasecounter = (phasecounter+1) % phase.length;
+        while(phase[phasecounter] == null)
+            phasecounter = (phasecounter+1) % phase.length;
 
         //make all buttons transparent
         ViewGroup gameView =(ViewGroup) findViewById(R.id.gameView);
@@ -255,7 +309,7 @@ public class GameActivity extends AppCompatActivity {
         }
 
         //leave selection in this case
-        if (!phase[phasecounter].equals("hexe"))
+        if (!(phase[phasecounter].equals("hexe") || phase[phasecounter].equals("dieb")))
             currentlySelectedPlayer = null;
 
         //action based on phase
@@ -263,24 +317,23 @@ public class GameActivity extends AppCompatActivity {
             case "tag":
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.tag));
                 Snackbar.make(findViewById(R.id.gameView), "Es ist Tag - Wähle eine Person, die du hängen möchtest", Snackbar.LENGTH_LONG).show();
-                // TODO: wait for pecentage range to be reached
+                // TODO: wait for percentage range to be reached
                 break;
 
             case "dieb":
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.dieb));
                 Snackbar.make(findViewById(R.id.gameView), "Dieb - wähle eine neue Identität", Snackbar.LENGTH_LONG).show();
-                // TODO: show to cards
+                popupdecision("Dieb - wähle deine neue Rolle", "dieb");
                 break;
 
             case "amor":
-                // TODO: select two players somehow
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.amor));
                 popupinfo("Amor - bestimme das Liebespaar. Wähle nun die erste Person");
 
 
                 break;
 
-            case "werwoelfe":
+            case "werwolf":
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.werwoelfe));
                 popupinfo("Werwölfe - wählt eine Person, die ihr töten möchtet");
 
@@ -289,7 +342,6 @@ public class GameActivity extends AppCompatActivity {
             case "seherin":
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.seherin));
                 Snackbar.make(findViewById(R.id.gameView), "Seherin - wähle eine Person, deren Identität du erfahren möchtest", Snackbar.LENGTH_LONG).show();
-                // TODO:  show identity
                 break;
 
             case "hexe":
@@ -365,6 +417,47 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
+    /* creates a popup letting you choose between two cards */
+    public void popupdecision(String info, final String toBeDecided){
+
+        ViewGroup gameView =(ViewGroup) findViewById(R.id.gameView);
+        //inflate the popupdecision.xml
+        View popupView = getLayoutInflater().inflate(R.layout.popupdecision, null);
+        final PopupWindow pw = new PopupWindow(popupView, gameView.getWidth(), gameView.getHeight(), true);
+
+        TextView textViewPopup = (TextView) popupView.findViewById(R.id.textViewPopupChoice);
+        Button buttonLeft = (Button) popupView.findViewById(R.id.buttonPopupLeft);
+        Button buttonRight = (Button) popupView.findViewById(R.id.buttonPopupRight);
+
+        buttonLeft.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_info_black_24dp, null));
+        buttonRight.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_notifications_black_24dp, null));
+        buttonLeft.setText(cards[cards.length-2]);
+        buttonRight.setText(cards[cards.length-1]);
+
+        textViewPopup.setText(info);
+
+        pw.showAtLocation(findViewById(R.id.activityGame), Gravity.CENTER, 0 ,0);
+
+        buttonLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pw.dismiss();
+                popup_callback(true, toBeDecided);
+
+            }
+        });
+
+        buttonRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pw.dismiss();
+                popup_callback(false, toBeDecided);
+
+            }
+        });
+
+    }
+
 
     /* action based on chosen value in popup */
     public void popup_callback(Boolean choice, String toBeDecided){
@@ -376,6 +469,12 @@ public class GameActivity extends AppCompatActivity {
             case "decisHexGift":
                 decisHexGift = choice;
                 break;
+
+            case "dieb":
+                if(choice)
+                    decisDieb = "left";
+                else
+                    decisDieb = "right";
         }
         confirm();
     }
