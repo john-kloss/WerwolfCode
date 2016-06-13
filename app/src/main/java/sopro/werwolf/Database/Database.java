@@ -1,4 +1,4 @@
-package sopro.werwolf;
+package sopro.werwolf.Database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

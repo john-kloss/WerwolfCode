@@ -1,4 +1,4 @@
-package sopro.werwolf;
+package sopro.werwolf.Database;
 
 /**
  * Created by Gina on 12.06.2016.

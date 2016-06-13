@@ -211,6 +211,7 @@ public class GameActivity extends AppCompatActivity {
                             if(decisHexGift) {
                                 //gifttrank used
                                 gifttrank = false;
+                                victimHex = currentlySelectedPlayer.getText().toString();
                                 //so you have to choose a new player
                                 currentlySelectedPlayer = null;
                                 //to enter the else part below the next time this method is called
