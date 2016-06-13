@@ -7,8 +7,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    public String playerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,5 +34,11 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
+    public void saveName(View view){
+        EditText editText = (EditText) findViewById(R.id.editTextName);
+
+        playerName = editText.getText().toString();
+        Snackbar.make(view, "Dein Name wurde gespeichert", Snackbar.LENGTH_LONG).show();
+    }
     // TODO: EditText for name
 }
