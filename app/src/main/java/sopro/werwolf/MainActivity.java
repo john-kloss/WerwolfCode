@@ -52,4 +52,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
+
+    public void testDB(View view){
+        Intent intent = new Intent(this, testShowDatabase.class);
+        startActivity(intent);
+    }
 }

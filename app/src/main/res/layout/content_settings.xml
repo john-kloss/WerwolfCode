@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:text="Speichern"
         android:id="@+id/saveNameButton"
+        android:onClick="saveName"
         android:layout_below="@+id/editTextName"
         android:layout_alignRight="@+id/editTextName"
         android:layout_alignEnd="@+id/editTextName" />
