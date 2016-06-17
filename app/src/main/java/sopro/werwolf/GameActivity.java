@@ -225,6 +225,7 @@ public class GameActivity extends AppCompatActivity {
                         victimSeh = currentlySelectedPlayer.getText().toString();
                         // TODO: get the role...
                         popupinfo(victimSeh + " ist ein ...");
+
                     }
                     else {
                         victimSeh = null;

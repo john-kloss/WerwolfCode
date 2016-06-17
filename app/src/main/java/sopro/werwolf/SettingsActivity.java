@@ -40,5 +40,5 @@ public class SettingsActivity extends AppCompatActivity {
         playerName = editText.getText().toString();
         Snackbar.make(view, "Dein Name wurde gespeichert", Snackbar.LENGTH_LONG).show();
     }
-    // TODO: EditText for name
+    // TODO: save permanently
 }
