@@ -3,6 +3,7 @@ package sopro.werwolf;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
@@ -15,11 +16,21 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class GameActivity extends AppCompatActivity {
+
     Button currentlySelectedPlayer;
+
+    //check frequently if limit is reached during the day
+    Handler timerHandler = new Handler();
+    Runnable timerRunnable= new Runnable() {
+
+        @Override
+        public void run() {
+            Snackbar.make(findViewById(R.id.gameView), "Checking for results...", Snackbar.LENGTH_SHORT).show();
+            timerHandler.postDelayed(this, 2000);
+        }
+    };
 
 
     //string contains phases, counter keeps track of current phase
@@ -166,7 +177,7 @@ public class GameActivity extends AppCompatActivity {
             switch (phase[phasecounter]) {
                 case "tag":
 
-                    // TODO: implement day
+                    timerHandler.removeCallbacks(timerRunnable);
 
                     nextPhase();
                     break;
@@ -298,7 +309,7 @@ public class GameActivity extends AppCompatActivity {
             phasecounter = (phasecounter+1) % phase.length;
 
         //make all buttons transparent
-        ViewGroup gameView =(ViewGroup) findViewById(R.id.gameView);
+        final ViewGroup gameView =(ViewGroup) findViewById(R.id.gameView);
         for (int i=0; i < gameView.getChildCount(); i++){
             LinearLayout row = (LinearLayout) gameView.getChildAt(i);
             for (int j=0; j < row.getChildCount(); j++){
@@ -318,16 +329,7 @@ public class GameActivity extends AppCompatActivity {
                 Snackbar.make(findViewById(R.id.gameView), "Es ist Tag - Wähle eine Person, die du hängen möchtest", Snackbar.LENGTH_LONG).show();
                 // TODO: wait for percentage range to be reached
 
-                int delay = 5000;
-                int period = 1000; //repeat every second
-
-                Timer timer = new Timer();
-                timer.scheduleAtFixedRate(new TimerTask() {
-                    @Override
-                    public void run() {
-
-                    }
-                }, delay, period);
+                timerHandler.postDelayed(timerRunnable, 0);
 
                 break;
 
@@ -428,7 +430,7 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
-    /* creates a popup letting you choose between two cards */
+    /* creates a popup letting you choose between two cards (Dieb) */
     public void popupdecision(String info, final String toBeDecided){
 
         ViewGroup gameView =(ViewGroup) findViewById(R.id.gameView);
@@ -440,8 +442,12 @@ public class GameActivity extends AppCompatActivity {
         Button buttonLeft = (Button) popupView.findViewById(R.id.buttonPopupLeft);
         Button buttonRight = (Button) popupView.findViewById(R.id.buttonPopupRight);
 
-        buttonLeft.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_info_black_24dp, null));
-        buttonRight.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_notifications_black_24dp, null));
+        buttonLeft.setHeight(pw.getHeight());
+        buttonRight.setHeight(pw.getHeight());
+        buttonLeft.setWidth(pw.getWidth()/2);
+        buttonRight.setWidth(pw.getWidth()/2);
+        buttonLeft.setCompoundDrawablesWithIntrinsicBounds(null, ResourcesCompat.getDrawable(getResources(), R.drawable.ic_info_black_24dp, null), null, null);
+        buttonRight.setCompoundDrawablesWithIntrinsicBounds(null, ResourcesCompat.getDrawable(getResources(), R.drawable.ic_info_black_24dp, null), null, null);
         buttonLeft.setText(cards[cards.length-2]);
         buttonRight.setText(cards[cards.length-1]);
 
@@ -483,9 +489,9 @@ public class GameActivity extends AppCompatActivity {
 
             case "dieb":
                 if(choice)
-                    decisDieb = "left";
+                    decisDieb = cards[cards.length-2];
                 else
-                    decisDieb = "right";
+                    decisDieb = cards[cards.length-1];
         }
         confirm();
     }
