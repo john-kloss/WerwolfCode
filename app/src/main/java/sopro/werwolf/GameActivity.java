@@ -1,16 +1,13 @@
 package sopro.werwolf;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -18,9 +15,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameActivity extends AppCompatActivity {
-
     Button currentlySelectedPlayer;
 
 
@@ -319,6 +317,18 @@ public class GameActivity extends AppCompatActivity {
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.tag));
                 Snackbar.make(findViewById(R.id.gameView), "Es ist Tag - Wähle eine Person, die du hängen möchtest", Snackbar.LENGTH_LONG).show();
                 // TODO: wait for percentage range to be reached
+
+                int delay = 5000;
+                int period = 1000; //repeat every second
+
+                Timer timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+
+                    }
+                }, delay, period);
+
                 break;
 
             case "dieb":
