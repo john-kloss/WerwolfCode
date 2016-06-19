@@ -39,8 +39,29 @@
         android:layout_height="wrap_content"
         android:text="Speichern"
         android:id="@+id/saveNameButton"
-        android:onClick="saveName"
+        android:onClick="saveSettings"
         android:layout_below="@+id/editTextName"
         android:layout_alignRight="@+id/editTextName"
         android:layout_alignEnd="@+id/editTextName" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_alignRight="@+id/editTextName"
+        android:layout_alignEnd="@+id/editTextName"
+        android:layout_below="@+id/saveNameButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/button" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bild auswählen"
+        android:id="@+id/button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="68dp" />
+
 </RelativeLayout>

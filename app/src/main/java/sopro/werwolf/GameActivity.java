@@ -37,7 +37,7 @@ public class GameActivity extends AppCompatActivity {
     String[] phase = new String[10];
     int phasecounter = 0;
 
-    String lover1, lover2, victimWer, victimHex, victimSeh, decisDieb;
+    String lover1, lover2, victimWer, victimDor, victimHex, victimSeh, decisDieb;
     Boolean decisHexHeil, decisHexGift;
     String[] cards;
 
@@ -72,6 +72,7 @@ public class GameActivity extends AppCompatActivity {
                 confirm();
             }
         });
+
     }
 
     /*
@@ -124,6 +125,7 @@ public class GameActivity extends AppCompatActivity {
             }
             j++;
         }
+
     }
 
     /*
@@ -173,7 +175,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void confirm(){
         // TODO: check for dead players
-        if (currentlySelectedPlayer != null) {
+        if (/*currentlySelectedPlayer != null*/true) {
             switch (phase[phasecounter]) {
                 case "tag":
 
@@ -301,7 +303,6 @@ public class GameActivity extends AppCompatActivity {
      */
 
     private void nextPhase(){
-
 
         //next phase modulo the number of phases
         phasecounter = (phasecounter+1) % phase.length;
