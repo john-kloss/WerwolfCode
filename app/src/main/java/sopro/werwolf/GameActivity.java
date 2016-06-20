@@ -175,7 +175,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void confirm(){
         // TODO: check for dead players
-        if (/*currentlySelectedPlayer != null*/true) {
+        if (currentlySelectedPlayer != null) {
             switch (phase[phasecounter]) {
                 case "tag":
 
