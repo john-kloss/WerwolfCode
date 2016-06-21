@@ -106,6 +106,9 @@ public class testShowDatabase extends AppCompatActivity {
                         //HTTP request with get
                         JSONObject jsonObject =jsonParser.makeHttpRequest(url_player_details, "GET", params);
 
+
+                        //jsonOpject is null...
+
                         Log.d("Alle Spieler: ", jsonObject.toString());
 
                         //check for success
