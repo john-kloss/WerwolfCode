@@ -3,7 +3,6 @@ package sopro.werwolf;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
@@ -175,7 +174,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void confirm(){
         // TODO: check for dead players
-        if (/*currentlySelectedPlayer != null*/true) {
+        if (currentlySelectedPlayer != null) {
             switch (phase[phasecounter]) {
                 case "tag":
 

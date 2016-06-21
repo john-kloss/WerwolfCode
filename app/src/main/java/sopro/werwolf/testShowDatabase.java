@@ -3,6 +3,7 @@ package sopro.werwolf;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,12 +12,25 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +43,7 @@ public class testShowDatabase extends AppCompatActivity {
 
     JSONParser jsonParser = new JSONParser();
 
-    private static final String url_player_details = "http://www-e.uni-magdeburg.de/jkloss/get_player_details.php";
+    private static final String url_player_details = "http://www-e.uni-magdeburg.de/jkloss/create_table.php";
 
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_PLAYER = "player";
@@ -48,9 +62,15 @@ public class testShowDatabase extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         new getPlayerDetails().execute();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +78,7 @@ public class testShowDatabase extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
     }
 
     class getPlayerDetails extends AsyncTask<String, String, String>{
@@ -82,12 +102,11 @@ public class testShowDatabase extends AppCompatActivity {
                     int success;
                     try {
                         List<NameValuePair> params = new ArrayList<NameValuePair>();
-                        params.add(new BasicNameValuePair("id", id));
 
                         //HTTP request with get
                         JSONObject jsonObject =jsonParser.makeHttpRequest(url_player_details, "GET", params);
 
-                        Log.d("Details", jsonObject.toString());
+                        Log.d("Alle Spieler: ", jsonObject.toString());
 
                         //check for success
                         success = jsonObject.getInt(TAG_SUCCESS);
