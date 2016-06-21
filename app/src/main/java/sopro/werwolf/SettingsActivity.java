@@ -1,5 +1,7 @@
 package sopro.werwolf;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -10,12 +12,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -51,7 +56,7 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         */
 
-        //Name auswählen/speichern
+        //Name auswählen
         playerName = (EditText) findViewById(R.id.editTextName);
 
         //Bild auswählen
@@ -68,10 +73,10 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         //Open SharedPref-File
-        SharedPreferences mySPR = getSharedPreferences("MySPFile", 0);
+        SharedPreferences mySPR_Name = getSharedPreferences("MySPFile", 0);
 
         //Read Keys from file in text field
-        playerName.setText(mySPR.getString("KeyName", "Name"));
+        playerName.setText(mySPR_Name.getString("KeyName", "Name"));
 
     }
 
@@ -115,4 +120,17 @@ public class SettingsActivity extends AppCompatActivity {
         Snackbar.make(view, "Dein Name wurde gespeichert", Snackbar.LENGTH_LONG).show();
     }
 
+    /*
+    public void saveImage(Context context, Bitmap b, String name, String extension){
+        name=name+"."+extension;
+        FileOutputStream out;
+        try {
+            out = context.openFileOutput(name, Context.MODE_PRIVATE);
+            b.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    */
 }
