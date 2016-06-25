@@ -3,18 +3,20 @@
 /*
  * Following code will list all the players
  */
+include("db_config.php");
 
 // array for JSON response
 $response = array();
 
-// include db connect class
-require_once __DIR__ . '/db_connect.php';
+// Verbindung aufbauen, auswählen einer Datenbank
+$link = mysql_connect("localhost", "jkloss", "werwolf")
+    or die("Keine Verbindung möglich!");
 
-// connecting to db
-$db = new DB_CONNECT();
+mysql_select_db("jkloss_db")
+    or die("Auswahl der Datenbank fehlgeschlagen");
 
-// get all products from products table
-$result = mysql_query("SELECT *FROM products") or die(mysql_error());
+// get all player from player table
+$result = mysql_query("SELECT *FROM player") or die(mysql_error());
 
 // check for empty result
 if (mysql_num_rows($result) > 0) {

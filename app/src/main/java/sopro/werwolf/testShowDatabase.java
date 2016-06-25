@@ -43,14 +43,15 @@ public class testShowDatabase extends AppCompatActivity {
 
     JSONParser jsonParser = new JSONParser();
 
-    private static final String url_player_details = "http://www-e.uni-magdeburg.de/jkloss/create_table.php";
+    private static final String url_initialize_database = "http://www-e.uni-magdeburg.de/jkloss/initialize_database.php";
+    private static final String url_player_details = "http://www-e.uni-magdeburg.de/jkloss/get_all_player.php";
 
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_PLAYER = "player";
     private static final String TAG_ID = "id";
     private static final String TAG_NAME = "name";
-    private static final String TAG_ROLE= "role";
-    private static final String TAG_TEAM= "team";
+    private static final String TAG_ROLE = "role";
+    private static final String TAG_TEAM = "team";
     private static final String TAG_LOVER = "lover";
     private static final String TAG_ALIVE = "alive";
 
@@ -66,24 +67,14 @@ public class testShowDatabase extends AppCompatActivity {
                 .permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        new getPlayerDetails().execute();
+        new initializeDatabase().execute();
 
 
-
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
     }
 
-    class getPlayerDetails extends AsyncTask<String, String, String>{
+    class getPlayerDetails extends AsyncTask<String, String, String> {
 
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             super.onPreExecute();
             pDiaglog = new ProgressDialog(testShowDatabase.this);
             pDiaglog.setMessage("Lade Spielerdetails. Bitte warten...");
@@ -104,16 +95,14 @@ public class testShowDatabase extends AppCompatActivity {
                         List<NameValuePair> params = new ArrayList<NameValuePair>();
 
                         //HTTP request with get
-                        JSONObject jsonObject =jsonParser.makeHttpRequest(url_player_details, "GET", params);
+                        JSONObject jsonObject = jsonParser.makeHttpRequest(url_player_details, "POST", params);
 
-
-                        //jsonOpject is null...
 
                         Log.d("Alle Spieler: ", jsonObject.toString());
 
                         //check for success
                         success = jsonObject.getInt(TAG_SUCCESS);
-                        if (success == 1){
+                        if (success == 1) {
                             //received player details
                             JSONArray playerObj = jsonObject.getJSONArray(TAG_PLAYER);
                             //get the first player object from JSON Array
@@ -124,9 +113,7 @@ public class testShowDatabase extends AppCompatActivity {
                             txtName.setText(player.getString(TAG_NAME));
                             txtRole.setText(player.getString(TAG_ROLE));
                         }
-                    }
-
-                    catch (JSONException e) {
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
@@ -134,8 +121,49 @@ public class testShowDatabase extends AppCompatActivity {
             return null;
         }
 
-        public void onPostExecute(String file_url){
+        public void onPostExecute(String file_url) {
+            pDiaglog.dismiss();
+        }
+    }
+
+    class initializeDatabase extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDiaglog = new ProgressDialog(testShowDatabase.this);
+            pDiaglog.setMessage("Initialisiere Datenbank. Bitte warten...");
+            pDiaglog.setIndeterminate(false);
+            pDiaglog.setCancelable(true);
+            pDiaglog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            //update UI from Background thread
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //check if it was successful
+                    int success;
+                    //try {
+                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+                        //HTTP request with get
+                        JSONObject jsonObject = jsonParser.makeHttpRequest(url_initialize_database, "GET", params);
+                    /*}
+                    catch (JSONException e) {
+                    e.printStackTrace();
+                    }*/
+
+                }
+            });
+            return null;
+        }
+
+        public void onPostExecute(String file_url) {
             pDiaglog.dismiss();
         }
     }
 }
+
+

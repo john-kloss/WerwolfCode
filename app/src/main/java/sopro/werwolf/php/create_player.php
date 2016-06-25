@@ -4,15 +4,17 @@ create_player.php
 /*
  * Following code will create a new player row
  * All details are read from HTTP Post Request
+ * GameID is needed
  */
+
+$gameID = 1;
  
 // array for JSON response
 $response = array();
  
 // check for required fields
-if (isset($_POST['id']) && isset($_POST['name'])) {
+if (isset($_POST['name'])) {
  
-    $id = $_POST['id'];
     $name = $_POST['name'];
  
     // include db connect class
@@ -21,21 +23,18 @@ if (isset($_POST['id']) && isset($_POST['name'])) {
     // connecting to db
     $db = new DB_CONNECT();
  
-    // mysql inserting a new row
-    $result = mysql_query("INSERT INTO player(id, name, role, team, lover, alive) VALUES('$id', '$name','','','','')");
+    // select playerID
+    $playerID("SELECT playerID FROM player WHERE name IS NULL AND gameID = "$gameID" LIMIT 1")
+	or die("Auswahl der playerID ist fehlgeschlagen");
+    // set player name
+    $result = mysql_query("UPDATE player SET name='Legolas' WHERE playerID = "$playerID"")
+	or die("Einfuegen des Namens ist fehlgeschlagen");
  
     // check if row inserted or not
     if ($result) {
         // successfully inserted into database
         $response["success"] = 1;
         $response["message"] = "Product successfully created.";
- 
-        // echoing JSON response
-        echo json_encode($response);
-    } else {
-        // failed to insert row
-        $response["success"] = 0;
-        $response["message"] = "An error occurred.";
  
         // echoing JSON response
         echo json_encode($response);
