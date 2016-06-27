@@ -237,6 +237,7 @@ public class GameActivity extends AppCompatActivity {
                             }
                         }, 500);
                     }
+                    // TODO: JSON - set lover
                     break;
 
 
@@ -245,13 +246,16 @@ public class GameActivity extends AppCompatActivity {
                     victimWer = currentlySelectedPlayer.getText().toString();
                     Snackbar.make(currentlySelectedPlayer, "Du hast " + victimWer + " ausgewählt", Snackbar.LENGTH_LONG).show();
 
+                    // TODO: check for decision of others and show votes
+                    // TODO: JSON - set victimWer
+
                     nextPhase();
                     break;
 
                 case "seherin":
                     if (victimSeh == null) {
                         victimSeh = currentlySelectedPlayer.getText().toString();
-                        // TODO: get the role...
+                        // TODO: JSON - get the role
                         popupinfo(victimSeh + " ist ein ...");
 
                     }
@@ -276,6 +280,7 @@ public class GameActivity extends AppCompatActivity {
                             if (decisHexHeil){
                                 victimWer = null;
                                 heiltrank = false;
+                                // TODO: JSON - save to database
                             }
                         }
 
@@ -288,6 +293,7 @@ public class GameActivity extends AppCompatActivity {
                                 currentlySelectedPlayer = null;
                                 //to enter the else part below the next time this method is called
                                 decisHexGift = false;
+                                // TODO: JSON - save to database
                             }
 
                             else{
@@ -345,7 +351,6 @@ public class GameActivity extends AppCompatActivity {
             case "tag":
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.tag));
                 Snackbar.make(findViewById(R.id.gameView), "Es ist Tag - Wähle eine Person, die du hängen möchtest", Snackbar.LENGTH_LONG).show();
-                // TODO: wait for percentage range to be reached
 
                 timerHandler.postDelayed(timerRunnable, 0);
 
@@ -378,6 +383,7 @@ public class GameActivity extends AppCompatActivity {
             case "hexe":
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.hexe));
                 //show
+                // TODO: JSON - get victimWer
                 popupinfo("Das Opfer der Werwölfe in dieser Nacht ist ..." + victimWer);
                 Snackbar.make(findViewById(R.id.gameView), "Hexe - du siehst nun das Opfer der Nacht.", Snackbar.LENGTH_LONG).show();
 
