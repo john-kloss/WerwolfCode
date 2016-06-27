@@ -48,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void startJoinGame(View view){
+        Intent intent = new Intent(this, JoinGameActivity.class);
+        startActivity(intent);
+    }
+
     public void startSettings(View view){
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);

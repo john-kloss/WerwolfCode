@@ -188,7 +188,22 @@ public class GameActivity extends AppCompatActivity {
 
                 case "dieb":
                     //get selected card
-
+                    // TODO: JSON - udpate dieb
+                    // TODO: update phase array (see below)
+                    switch (decisDieb){
+                        case "amor":
+                            phase[2] = "amor";
+                            break;
+                        case "werwolf":
+                            phase[3] = "werwolf";
+                            break;
+                        case "seherin":
+                            phase[4] = "seherin";
+                            break;
+                        case "hexe":
+                            phase[5] = "hexe";
+                            break;
+                    }
 
                     //remove from phase array
                     phase[phasecounter] = "";

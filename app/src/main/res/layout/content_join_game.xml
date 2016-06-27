@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="sopro.werwolf.joinGameActivity"
+    tools:context=".JoinGameActivity"
     tools:showIn="@layout/activity_join_game">
 
     <TextView
@@ -39,6 +39,6 @@
         android:text="OK"
         android:id="@+id/button2"
         android:layout_below="@+id/gameID"
-        android:layout_centerHorizontal="true"
-        android:onClick="joinGame" />
+        android:onClick="joinGame"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

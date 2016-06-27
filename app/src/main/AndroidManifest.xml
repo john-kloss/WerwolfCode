@@ -67,7 +67,7 @@
                 android:value="sopro.werwolf.MainActivity" />
         </activity>
         <activity
-            android:name=".joinGameActivity"
+            android:name=".JoinGameActivity"
             android:label="@string/title_activity_join_game"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">

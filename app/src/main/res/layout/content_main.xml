@@ -43,7 +43,9 @@
         android:layout_below="@+id/startGame"
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/SizeButtonText"
-        android:text="@string/join_game"/>
+        android:text="@string/join_game"
+        android:onClick="startJoinGame"
+        android:nestedScrollingEnabled="false" />
 
     <Button
         android:id="@+id/settings"
