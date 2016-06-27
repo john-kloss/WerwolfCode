@@ -23,6 +23,9 @@
     <string name="cardDor">Dorfbewohner</string>
     <string name="spinnerPrompt">Wähle die Anzahl der Werwölfe</string>
 
+    Join Game
+    <string name="enterGameID">Bitte gib die ID des Spiels ein, dem du beitreten möchtest.</string>
+
     <string-array name="numbers">
         <item>1</item>
         <item>2</item>
@@ -31,5 +34,6 @@
         <item>5</item>
     </string-array>
     <string name="title_activity_test_show_database">testShowDatabase</string>
+    <string name="title_activity_join_game">joinGameActivity</string>
 
 </resources>

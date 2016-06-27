@@ -27,6 +27,7 @@ public class GameActivity extends AppCompatActivity {
         @Override
         public void run() {
             Snackbar.make(findViewById(R.id.gameView), "Checking for results...", Snackbar.LENGTH_SHORT).show();
+            // TODO: JSON - check for changes
             timerHandler.postDelayed(this, 2000);
         }
     };
@@ -81,7 +82,7 @@ public class GameActivity extends AppCompatActivity {
     * Like rows, button, ...
     *
     */
-    private void createObjects(int players){
+    private void createObjects(int numOfPlayers){
         //create Linear Layouts in gameView
         LinearLayout row1 = (LinearLayout) findViewById(R.id.row1);
         LinearLayout row2 = (LinearLayout) findViewById(R.id.row2);
@@ -89,10 +90,12 @@ public class GameActivity extends AppCompatActivity {
         LinearLayout row4 = (LinearLayout) findViewById(R.id.row4);
 
         //create playerbuttons
-        for (int i = 0; i < players; i++){
+        for (int i = 0; i < numOfPlayers; i++){
             Button button = new Button(this);
             button.setText("player"+i);
             button.setBackgroundColor(0);
+            // TODO: JSON - getAllPlayer.php
+            //button.setText(player[i]);
             View.OnClickListener onClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

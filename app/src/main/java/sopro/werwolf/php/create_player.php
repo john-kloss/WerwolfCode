@@ -1,4 +1,4 @@
-create_player.php
+
 <?php
  
 /*
@@ -13,8 +13,9 @@ $gameID = 1;
 $response = array();
  
 // check for required fields
-if (isset($_POST['name'])) {
+if (isset($_POST['gameID']) && isset($_POST['name'])) {
  
+    $gameID = $_POST['gameID']
     $name = $_POST['name'];
  
     // include db connect class
@@ -24,17 +25,18 @@ if (isset($_POST['name'])) {
     $db = new DB_CONNECT();
  
     // select playerID
-    $playerID("SELECT playerID FROM player WHERE name IS NULL AND gameID = "$gameID" LIMIT 1")
+    $return = mysql_query("SELECT playerID FROM player WHERE name IS NULL AND gameID = "$gameID" LIMIT 1")
 	or die("Auswahl der playerID ist fehlgeschlagen");
+    $playerID = mysql_fetch_array($return, MYSQL_NUM);
     // set player name
-    $result = mysql_query("UPDATE player SET name='Legolas' WHERE playerID = "$playerID"")
+    $result = mysql_query("UPDATE player SET name='Legolas' WHERE playerID = "$playerID"") //replace with $name
 	or die("Einfuegen des Namens ist fehlgeschlagen");
  
     // check if row inserted or not
     if ($result) {
         // successfully inserted into database
         $response["success"] = 1;
-        $response["message"] = "Product successfully created.";
+        $response["message"] = "Player successfully added.";
  
         // echoing JSON response
         echo json_encode($response);
