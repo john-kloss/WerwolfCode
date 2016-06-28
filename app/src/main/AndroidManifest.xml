@@ -58,7 +58,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".testShowDatabase"
+            android:name=".Database"
             android:label="@string/title_activity_test_show_database"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">

@@ -1,26 +1,30 @@
-get_player_details.php
+
 <?php
  
 /*
  * Following code will get single player details
- * A player is identified by his/her id
+ * A player is identified by his/her id and the gameID
  */
  
 // array for JSON response
 $response = array();
- 
-// include db connect class
-require_once __DIR__ . '/db_connect.php';
- 
+
 // connecting to db
-$db = new DB_CONNECT();
- 
+$link = mysql_connect("localhost", "jkloss", "werwolf")
+or die("Keine Verbindung möglich!");
+
+mysql_select_db("jkloss_db")
+or die("Auswahl der Datenbank fehlgeschlagen");
+
+
 // check for post data
-if (isset($_GET["id"])) {
-    $id = $_GET['id'];
+if (isset($_GET["playerID"]) && isset($_GET["gameID"])) {
+
+    $playerID = $_GET['playerID'];
+    $gameID = $_GET['gameID'];
  
-    // get a product from player table
-    $result = mysql_query("SELECT *FROM player WHERE id = $id");
+    // get a player from player table
+    $result = mysql_query("SELECT * FROM player WHERE playerID = '$playerID' AND gameID = '$gameID'");
  
     if (!empty($result)) {
         // check for empty result
@@ -29,11 +33,10 @@ if (isset($_GET["id"])) {
             $result = mysql_fetch_array($result);
  
             $player = array();
-            $player["id"] = $result["id"];
+            $player["playerID"] = $result["playerID"];
+            $player["gameID"] = $result["gameID"];
             $player["name"] = $result["name"];
             $player["role"] = $result["role"];
-            $player["team"] = $result["team"];
-            $player["lover"] = $result["lover"];
             $player["alive"] = $result["alive"];
             // success
             $response["success"] = 1;
@@ -41,12 +44,12 @@ if (isset($_GET["id"])) {
             // user node
             $response["player"] = array();
  
-            array_push($response["product"], $player);
+            array_push($response["player"], $player);
  
             // echoing JSON response
             echo json_encode($response);
         } else {
-            // no product found
+            // no player found
             $response["success"] = 0;
             $response["message"] = "No player found";
  
@@ -54,7 +57,7 @@ if (isset($_GET["id"])) {
             echo json_encode($response);
         }
     } else {
-        // no product found
+        // no player found
         $response["success"] = 0;
         $response["message"] = "No player found";
  
