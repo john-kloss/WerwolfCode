@@ -16,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import sopro.werwolf.DatabaseConnection.databaseCon;
+
+
 public class GameActivity extends AppCompatActivity {
 
     Button currentlySelectedPlayer;
@@ -28,6 +31,7 @@ public class GameActivity extends AppCompatActivity {
         public void run() {
             Snackbar.make(findViewById(R.id.gameView), "Checking for results...", Snackbar.LENGTH_SHORT).show();
             // TODO: JSON - check for changes
+
             timerHandler.postDelayed(this, 2000);
         }
     };
@@ -42,6 +46,7 @@ public class GameActivity extends AppCompatActivity {
     String[] cards;
 
     // TODO: save game status in data base
+
     boolean gifttrank = true;
     boolean heiltrank = true;
 
@@ -72,6 +77,7 @@ public class GameActivity extends AppCompatActivity {
                 confirm();
             }
         });
+
 
     }
 
@@ -176,7 +182,12 @@ public class GameActivity extends AppCompatActivity {
      */
 
     private void confirm(){
-        // TODO: check for dead players
+
+        databaseCon con = new databaseCon();
+
+        //check for dead players
+        //con.checkDeadPlayers(gameID);
+
         if (currentlySelectedPlayer != null) {
             switch (phase[phasecounter]) {
                 case "tag":
@@ -192,15 +203,19 @@ public class GameActivity extends AppCompatActivity {
                     // TODO: update phase array (see below)
                     switch (decisDieb){
                         case "amor":
+                            //con.Role("Dieb", "amor", playerID, gameID); - playerID = own playerID
                             phase[2] = "amor";
                             break;
                         case "werwolf":
+                            //con.Role("Dieb", "werwolf", playerID, gameID);
                             phase[3] = "werwolf";
                             break;
                         case "seherin":
+                            //con.Role("Dieb", "seherin", playerID, gameID);
                             phase[4] = "seherin";
                             break;
                         case "hexe":
+                            //con.Role("Dieb", "hexe", playerID, gameID);
                             phase[5] = "hexe";
                             break;
                     }
@@ -216,21 +231,27 @@ public class GameActivity extends AppCompatActivity {
                     if (lover1 == null) {
                         lover1 = currentlySelectedPlayer.getText().toString();
                         Snackbar.make(currentlySelectedPlayer, "Du hast "+lover1+" ausgewählt",Snackbar.LENGTH_LONG).show();
+
+                        //con.Role("Amor", "lover1", lover1ID, gameID);
+
                         popupinfo("Wähle nun die zweite Person");
                     }
                     else if (!lover1.equals(currentlySelectedPlayer.getText())){
 
                         lover2 = currentlySelectedPlayer.getText().toString();
+
+                        // con.Role("Amor", "lover2", lover2ID, gameID);
+
                         Snackbar.make(currentlySelectedPlayer, lover1 + " hat sich in " + lover2 + " verliebt", Snackbar.LENGTH_LONG).show();
 
                         //disable fab till next phase is created
-                        ((FloatingActionButton) findViewById(R.id.fab)).setEnabled(false);
+                        findViewById(R.id.fab).setEnabled(false);
 
                         //make the system wait for 3 seconds before starting new phase
                         Handler mHandler = new Handler();
                         mHandler.postDelayed(new Runnable() {
                             public void run() {
-                                ((FloatingActionButton) findViewById(R.id.fab)).setEnabled(true);
+                                findViewById(R.id.fab).setEnabled(true);
                                 //remove from phase array
                                 phase[phasecounter] = "";
                                 nextPhase();
@@ -238,6 +259,7 @@ public class GameActivity extends AppCompatActivity {
                         }, 500);
                     }
                     // TODO: JSON - set lover
+                    // entweder wie oben hier gesammelt; dann müssten aber die jeweiligen playerIDs gespeichert werden
                     break;
 
 
@@ -248,6 +270,7 @@ public class GameActivity extends AppCompatActivity {
 
                     // TODO: check for decision of others and show votes
                     // TODO: JSON - set victimWer
+                    //con.Role("Werwolf", null, victimWerID, gameUD);
 
                     nextPhase();
                     break;
@@ -256,7 +279,9 @@ public class GameActivity extends AppCompatActivity {
                     if (victimSeh == null) {
                         victimSeh = currentlySelectedPlayer.getText().toString();
                         // TODO: JSON - get the role
-                        popupinfo(victimSeh + " ist ein ...");
+                        String GoB = null;
+                        //GoB = con.Role("Seherin", null, 0, "0");
+                        popupinfo(victimSeh + " ist ein ..." + GoB);
 
                     }
                     else {
@@ -268,10 +293,16 @@ public class GameActivity extends AppCompatActivity {
                 case "hexe":
 
                     //execute if there is no decision on the 'heiltrank' yet
+
+                    //gifttrank = con.Role("Hexe", "Gifttrank", 0, gameID);
+                    //heiltrank = con.Role("Hexe", "Heiltrank", 0, gameID);
+
                     if (decisHexHeil == null && heiltrank){
                         popupchoice("Möchtest du das Opfer retten?", "decisHexHeil");
                     }
                     //otherwise ask if the 'gifttrank' should be used
+
+
                     else if (decisHexGift == null && gifttrank) {
                         popupchoice("Möchtest du deinen Gifttrank verwenden?", "decisHexGift");
                     }
@@ -281,6 +312,7 @@ public class GameActivity extends AppCompatActivity {
                                 victimWer = null;
                                 heiltrank = false;
                                 // TODO: JSON - save to database
+                                //con.Role("Hexe", "TrankVerwendenHeilen", 0, gameID);
                             }
                         }
 
@@ -294,6 +326,7 @@ public class GameActivity extends AppCompatActivity {
                                 //to enter the else part below the next time this method is called
                                 decisHexGift = false;
                                 // TODO: JSON - save to database
+                                //con.Role("Hexe", "TrankVerwendenGift", victimHexID, gameID);
                             }
 
                             else{
@@ -384,6 +417,8 @@ public class GameActivity extends AppCompatActivity {
                 findViewById(R.id.activityGame).setBackgroundColor(getResources().getColor(R.color.hexe));
                 //show
                 // TODO: JSON - get victimWer
+                databaseCon con = new databaseCon();
+                // String victimWer = con.Role("Hexe", "show", 0, "0");
                 popupinfo("Das Opfer der Werwölfe in dieser Nacht ist ..." + victimWer);
                 Snackbar.make(findViewById(R.id.gameView), "Hexe - du siehst nun das Opfer der Nacht.", Snackbar.LENGTH_LONG).show();
 

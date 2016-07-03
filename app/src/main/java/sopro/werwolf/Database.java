@@ -225,7 +225,7 @@ public class Database extends AppCompatActivity {
      * Gets game details
      * @param gameID
      */
-    class getGameDetails extends AsyncTask<String, String, String>{
+     class getGameDetails extends AsyncTask<String, String, String>{
         protected void onPreExecute() {
             super.onPreExecute();
             pDiaglog = new ProgressDialog(Database.this);
@@ -281,7 +281,7 @@ public class Database extends AppCompatActivity {
      * Updates game details
      * @param gameID(&lover1)(&lover2)(&victimHex)(&heiltrank)(&victimWer)(&victimDor)
      */
-    class updateGame extends AsyncTask<String, String, String>{
+     class updateGame extends AsyncTask<String, String, String>{
         protected void onPreExecute() {
             super.onPreExecute();
             pDiaglog = new ProgressDialog(Database.this);
