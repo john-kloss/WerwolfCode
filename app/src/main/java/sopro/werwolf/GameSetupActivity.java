@@ -1,9 +1,11 @@
 package sopro.werwolf;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,7 +26,13 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class GameSetupActivity extends AppCompatActivity {
@@ -34,6 +42,10 @@ public class GameSetupActivity extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    JSONParser jsonParser = new JSONParser();
+    ProgressDialog pDiaglog;
+    private static final String url_initialize_table = "http://www-e.uni-magdeburg.de/jkloss/initialize_table.php";
+    private static final String TAG_SUCCESS = "success";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,7 +199,7 @@ public class GameSetupActivity extends AppCompatActivity {
             //pick a random number in array
             Random random = new Random();
             int value = random.nextInt(i);
-            //move on till an empty slot is found
+            //move on until an empty slot is found
             while(cardsShuffled[value]!=null)
                 value=(value+1)%i;
 
@@ -195,11 +207,69 @@ public class GameSetupActivity extends AppCompatActivity {
         }
 
         // TODO: JSON - initialize_table.php  
-
+        new initializeDatabase().execute();
 
         Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("cards", cardsShuffled);
         startActivity(intent);
+    }
+
+    /*
+     * This class initializes the database.
+     * It creates a new column in 'game' with a new gameID.
+     * Afterwards, according to the numOfPlayers, new rows with role and playerID
+     * will be inserted into 'player'.
+     * @param numOfPlayer&roles[]
+     */
+    class initializeDatabase extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDiaglog = new ProgressDialog(GameSetupActivity.this);
+            pDiaglog.setMessage("Initialisiere Datenbank. Bitte warten...");
+            pDiaglog.setIndeterminate(false);
+            pDiaglog.setCancelable(true);
+            pDiaglog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            //update UI from Background thread
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    String[] roles = {"Hexe"};
+
+                    List<NameValuePair> params = new ArrayList<NameValuePair>();
+                    for (int i = 0; i < roles.length; i++){
+                        params.add(new BasicNameValuePair("roles[]", roles[i]));
+                    }
+
+                    //HTTP request with post
+                    JSONObject json = jsonParser.makeHttpRequest(url_initialize_table, "POST", params);
+
+                    try {
+                        int success = json.getInt("success");
+
+                        if (success == 1) {
+                            Snackbar.make(findViewById(R.id.joinGameView), "Spiel initialisiert", Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            Snackbar.make(findViewById(R.id.joinGameView), "Spiel konnte nicht initialisiert werden", Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+                    catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+            return null;
+        }
+
+        public void onPostExecute(String file_url) {
+            pDiaglog.dismiss();
+        }
     }
     
 }

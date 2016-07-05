@@ -25,8 +25,10 @@ public class JoinGameActivity extends AppCompatActivity {
     JSONParser jsonParser = new JSONParser();
     ProgressDialog pDiaglog;
     String name;
+    String gameID;
     private static final String url_create_player = "http://www-e.uni-magdeburg.de/jkloss/create_player.php";
     private static final String TAG_SUCCESS = "success";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +44,13 @@ public class JoinGameActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void joinGame(View view){
         EditText editText = (EditText) findViewById(R.id.gameID);
-        String gameID = editText.getText().toString();
+        gameID = editText.getText().toString();
 
         new createPlayer().execute();
-
-        // TODO: JSON - create_player.php 
     }
 
     /*
@@ -70,7 +69,6 @@ public class JoinGameActivity extends AppCompatActivity {
         }
         protected String doInBackground(String... args) {
             String name = "John";
-            String gameID = "0";
 
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("name", name));
@@ -85,10 +83,8 @@ public class JoinGameActivity extends AppCompatActivity {
                 int success = json.getInt("success");
 
                 if (success == 1) {
-                    // successfully created product
+                    // successfully created player
                     Snackbar.make(findViewById(R.id.joinGameView), "Spieler erstellt", Snackbar.LENGTH_SHORT).show();
-                    // closing this screen
-                    finish();
                 } else {
                     // failed to create player
                     Snackbar.make(findViewById(R.id.joinGameView), "Spieler nicht erstellt", Snackbar.LENGTH_SHORT).show();
