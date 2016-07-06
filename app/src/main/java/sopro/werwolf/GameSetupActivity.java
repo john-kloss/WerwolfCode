@@ -207,7 +207,7 @@ public class GameSetupActivity extends AppCompatActivity {
         }
 
         // TODO: JSON - initialize_table.php  
-        new initializeDatabase().execute();
+        //new initializeDatabase().execute();
 
         Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("cards", cardsShuffled);
