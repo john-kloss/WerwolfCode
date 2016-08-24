@@ -198,25 +198,29 @@ public class GameActivity extends AppCompatActivity {
                     break;
 
                 case "dieb":
-                    //get selected card
+                    decisDieb = "amor";
                     // TODO: JSON - udpate dieb
                     // TODO: update phase array (see below)
                     switch (decisDieb){
                         case "amor":
-                            //con.Role("Dieb", "amor", playerID, gameID); - playerID = own playerID
+                           //- playerID = own playerID
+                            con.Role("Dieb", "Amor", 1, "1");
                             phase[2] = "amor";
                             break;
                         case "werwolf":
-                            //con.Role("Dieb", "werwolf", playerID, gameID);
                             phase[3] = "werwolf";
+                            //con.Role("Dieb", "Werwolf", playerID, gameID);
                             break;
                         case "seherin":
-                            //con.Role("Dieb", "seherin", playerID, gameID);
                             phase[4] = "seherin";
+                            //con.Role("Dieb", "Werwolf", playerID, gameID);
                             break;
                         case "hexe":
-                            //con.Role("Dieb", "hexe", playerID, gameID);
                             phase[5] = "hexe";
+                            //con.Role("Dieb", "Hexe", playerID, gameID);
+                            break;
+                        case "dorfbewohner":
+                            //con.Role("Dieb", "Dorfbewohner", playerID, gameID);
                             break;
                     }
 
@@ -232,7 +236,7 @@ public class GameActivity extends AppCompatActivity {
                         lover1 = currentlySelectedPlayer.getText().toString();
                         Snackbar.make(currentlySelectedPlayer, "Du hast "+lover1+" ausgewählt",Snackbar.LENGTH_LONG).show();
 
-                        //con.Role("Amor", "lover1", lover1ID, gameID);
+                        con.Role("Amor", "lover1", 1, "0"); // ToDo: set playerId and gameID
 
                         popupinfo("Wähle nun die zweite Person");
                     }
@@ -240,7 +244,7 @@ public class GameActivity extends AppCompatActivity {
 
                         lover2 = currentlySelectedPlayer.getText().toString();
 
-                        // con.Role("Amor", "lover2", lover2ID, gameID);
+                        con.Role("Amor", "lover2", 2, "0");
 
                         Snackbar.make(currentlySelectedPlayer, lover1 + " hat sich in " + lover2 + " verliebt", Snackbar.LENGTH_LONG).show();
 
@@ -259,7 +263,7 @@ public class GameActivity extends AppCompatActivity {
                         }, 500);
                     }
                     // TODO: JSON - set lover
-                    // entweder wie oben hier gesammelt; dann müssten aber die jeweiligen playerIDs gespeichert werden
+                    // entweder wie oben oder hier gesammelt; dann müssten aber die jeweiligen playerIDs gespeichert werden
                     break;
 
 
@@ -270,7 +274,7 @@ public class GameActivity extends AppCompatActivity {
 
                     // TODO: check for decision of others and show votes
                     // TODO: JSON - set victimWer
-                    //con.Role("Werwolf", null, victimWerID, gameUD);
+                    //con.Role("Werwolf", null, victimWerID, gameID);
 
                     nextPhase();
                     break;
@@ -280,8 +284,8 @@ public class GameActivity extends AppCompatActivity {
                         victimSeh = currentlySelectedPlayer.getText().toString();
                         // TODO: JSON - get the role
                         String GoB = null;
-                        //GoB = con.Role("Seherin", null, 0, "0");
-                        popupinfo(victimSeh + " ist ein ..." + GoB);
+                        GoB = con.Role("Seherin", null, 1, "1"); // ToDO: change numbers to playerId and gameID
+                        popupinfo(victimSeh + " ist " + GoB);
 
                     }
                     else {
@@ -294,8 +298,8 @@ public class GameActivity extends AppCompatActivity {
 
                     //execute if there is no decision on the 'heiltrank' yet
 
-                    //gifttrank = con.Role("Hexe", "Gifttrank", 0, gameID);
-                    //heiltrank = con.Role("Hexe", "Heiltrank", 0, gameID);
+                    gifttrank = Boolean.parseBoolean(con.Role("Hexe", "Gifttrank", 0, "0")); // ToDo: change number to playerID/ gameID
+                    heiltrank = Boolean.parseBoolean(con.Role("Hexe", "Heiltrank", 0, "0")); // ToDo: change number to playerID/ gameID
 
                     if (decisHexHeil == null && heiltrank){
                         popupchoice("Möchtest du das Opfer retten?", "decisHexHeil");
